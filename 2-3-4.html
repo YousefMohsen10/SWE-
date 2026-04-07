@@ -1,2209 +1,3377 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CS251 – Requirements Engineering | مذاكرة تفاعلية</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg: #0d1117;
-  --bg2: #161b22;
-  --bg3: #1c2230;
-  --surface: #1e2a3a;
-  --surface2: #243040;
-  --border: #2d3f55;
-  --text: #e0e8f4;
-  --text2: #8aa3bf;
-  --text3: #5a7a9a;
-  --accent: #f0a500;
-  --accent2: #e07800;
-  --teal: #00d4aa;
-  --teal2: #00a884;
-  --blue: #4d9fff;
-  --red: #ff5b5b;
-  --green: #4dcc88;
-  --purple: #a78bfa;
-  --pink: #f472b6;
-  --font-ar: 'Tajawal', sans-serif;
-  --font-en: 'JetBrains Mono', monospace;
-  --radius: 12px;
-  --shadow: 0 8px 32px rgba(0,0,0,0.4);
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: var(--font-ar);
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.7;
-  font-size: 16px;
-}
-
-/* ===== SCROLLBAR ===== */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--bg2); }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-/* ===== PROGRESS BAR ===== */
-#progress-bar {
-  position: fixed;
-  top: 0; left: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--accent), var(--teal));
-  z-index: 9999;
-  transition: width 0.1s;
-  width: 0%;
-}
-
-/* ===== HEADER ===== */
-header {
-  background: linear-gradient(135deg, #0a0e16 0%, #0d1f35 50%, #0a1625 100%);
-  border-bottom: 1px solid var(--border);
-  padding: 0 2rem;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  backdrop-filter: blur(12px);
-}
-
-.header-inner {
-  max-width: 1300px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 60px;
-  gap: 1rem;
-}
-
-.logo {
-  font-family: var(--font-en);
-  font-size: 1rem;
-  color: var(--accent);
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.logo span { color: var(--teal); }
-
-.search-box {
-  display: flex;
-  align-items: center;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 0.4rem 1rem;
-  gap: 0.5rem;
-  flex: 1;
-  max-width: 350px;
-}
-
-.search-box input {
-  background: none;
-  border: none;
-  outline: none;
-  color: var(--text);
-  font-family: var(--font-ar);
-  font-size: 0.9rem;
-  width: 100%;
-  direction: rtl;
-}
-
-.search-box input::placeholder { color: var(--text3); }
-
-/* ===== LAYOUT ===== */
-.layout {
-  max-width: 1300px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 0;
-  min-height: 100vh;
-}
-
-/* ===== SIDEBAR ===== */
-.sidebar {
-  position: sticky;
-  top: 60px;
-  height: calc(100vh - 60px);
-  overflow-y: auto;
-  border-left: 1px solid var(--border);
-  padding: 1.5rem 1rem;
-  background: var(--bg2);
-}
-
-.sidebar h3 {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--text3);
-  margin-bottom: 1rem;
-  padding-right: 0.5rem;
-}
-
-.sidebar nav a {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.55rem 0.8rem;
-  border-radius: 8px;
-  text-decoration: none;
-  color: var(--text2);
-  font-size: 0.85rem;
-  margin-bottom: 2px;
-  transition: all 0.2s;
-  border: 1px solid transparent;
-}
-
-.sidebar nav a:hover, .sidebar nav a.active {
-  background: var(--surface);
-  color: var(--accent);
-  border-color: var(--border);
-}
-
-.sidebar nav a .icon { font-size: 1rem; }
-.sidebar nav a .num {
-  margin-right: auto;
-  font-family: var(--font-en);
-  font-size: 0.7rem;
-  background: var(--bg3);
-  padding: 1px 6px;
-  border-radius: 10px;
-  color: var(--text3);
-}
-
-/* ===== MAIN ===== */
-main {
-  padding: 2.5rem 3rem;
-  max-width: 900px;
-}
-
-/* ===== HERO ===== */
-.hero {
-  background: linear-gradient(135deg, #0d1f35 0%, #0a1a2e 100%);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 3rem;
-  margin-bottom: 3rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.hero::before {
-  content: '';
-  position: absolute;
-  top: -50px; left: -50px;
-  width: 300px; height: 300px;
-  background: radial-gradient(circle, rgba(0,212,170,0.07) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-.hero::after {
-  content: '';
-  position: absolute;
-  bottom: -80px; right: -80px;
-  width: 400px; height: 400px;
-  background: radial-gradient(circle, rgba(240,165,0,0.06) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-.hero-badge {
-  display: inline-block;
-  background: rgba(0,212,170,0.1);
-  border: 1px solid rgba(0,212,170,0.3);
-  color: var(--teal);
-  padding: 0.3rem 1rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  margin-bottom: 1.5rem;
-  font-family: var(--font-en);
-}
-
-.hero h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.2rem;
-  line-height: 1.3;
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, #fff 0%, #8aa3bf 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.hero p {
-  color: var(--text2);
-  font-size: 1.05rem;
-  max-width: 600px;
-  margin-bottom: 2rem;
-}
-
-.hero-stats {
-  display: flex;
-  gap: 2rem;
-  flex-wrap: wrap;
-}
-
-.stat {
-  text-align: center;
-}
-
-.stat-num {
-  font-family: var(--font-en);
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--accent);
-}
-
-.stat-label {
-  font-size: 0.8rem;
-  color: var(--text3);
-}
-
-/* ===== SECTIONS ===== */
-.section {
-  margin-bottom: 4rem;
-}
-
-.section-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.section-icon {
-  width: 48px; height: 48px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.4rem;
-  flex-shrink: 0;
-}
-
-.icon-blue { background: rgba(77,159,255,0.15); border: 1px solid rgba(77,159,255,0.3); }
-.icon-teal { background: rgba(0,212,170,0.12); border: 1px solid rgba(0,212,170,0.3); }
-.icon-amber { background: rgba(240,165,0,0.12); border: 1px solid rgba(240,165,0,0.3); }
-.icon-purple { background: rgba(167,139,250,0.12); border: 1px solid rgba(167,139,250,0.3); }
-.icon-pink { background: rgba(244,114,182,0.12); border: 1px solid rgba(244,114,182,0.3); }
-.icon-green { background: rgba(77,204,136,0.12); border: 1px solid rgba(77,204,136,0.3); }
-
-.section-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--text);
-}
-
-.section-num {
-  font-family: var(--font-en);
-  font-size: 0.75rem;
-  color: var(--accent);
-  background: rgba(240,165,0,0.1);
-  padding: 2px 8px;
-  border-radius: 8px;
-  margin-top: 4px;
-  display: inline-block;
-}
-
-/* ===== CARDS ===== */
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  margin-bottom: 1.2rem;
-}
-
-.card-summary {
-  background: linear-gradient(135deg, #1a2840 0%, #152234 100%);
-  border-color: rgba(77,159,255,0.3);
-  border-right: 3px solid var(--blue);
-}
-
-.card-definition {
-  background: linear-gradient(135deg, #1a2a20 0%, #142018 100%);
-  border-color: rgba(77,204,136,0.3);
-  border-right: 3px solid var(--green);
-}
-
-.card-warning {
-  background: linear-gradient(135deg, #2a2010 0%, #201808 100%);
-  border-color: rgba(240,165,0,0.3);
-  border-right: 3px solid var(--accent);
-}
-
-.card-exam {
-  background: linear-gradient(135deg, #2a1a20 0%, #201018 100%);
-  border-color: rgba(255,91,91,0.3);
-  border-right: 3px solid var(--red);
-}
-
-.card-tip {
-  background: linear-gradient(135deg, #1a2030 0%, #141828 100%);
-  border-color: rgba(167,139,250,0.3);
-  border-right: 3px solid var(--purple);
-}
-
-.card-label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  font-weight: 700;
-  margin-bottom: 0.8rem;
-}
-
-.label-blue { color: var(--blue); }
-.label-green { color: var(--green); }
-.label-amber { color: var(--accent); }
-.label-red { color: var(--red); }
-.label-purple { color: var(--purple); }
-.label-teal { color: var(--teal); }
-
-.card h4 {
-  font-size: 1rem;
-  color: var(--text);
-  margin-bottom: 0.6rem;
-}
-
-.card p, .card li {
-  color: var(--text2);
-  font-size: 0.95rem;
-  line-height: 1.7;
-}
-
-.card ul { padding-right: 1.5rem; }
-.card li { margin-bottom: 0.4rem; }
-
-/* ===== EXPLANATION BLOCKS ===== */
-.explain-block {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  margin-bottom: 1.2rem;
-  overflow: hidden;
-}
-
-.explain-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 1.5rem;
-  cursor: pointer;
-  user-select: none;
-  transition: background 0.2s;
-}
-
-.explain-toggle:hover { background: var(--surface2); }
-
-.explain-toggle-title {
-  font-weight: 600;
-  font-size: 1rem;
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-}
-
-.explain-arrow {
-  color: var(--text3);
-  transition: transform 0.3s;
-  font-size: 0.8rem;
-}
-
-.explain-block.open .explain-arrow { transform: rotate(180deg); }
-
-.explain-content {
-  display: none;
-  padding: 0 1.5rem 1.5rem;
-  color: var(--text2);
-  font-size: 0.95rem;
-  line-height: 1.8;
-  border-top: 1px solid var(--border);
-}
-
-.explain-block.open .explain-content { display: block; }
-
-.explain-content p { margin-bottom: 0.8rem; }
-.explain-content ul { padding-right: 1.5rem; margin-bottom: 0.8rem; }
-.explain-content li { margin-bottom: 0.4rem; }
-
-/* ===== TAGS ===== */
-.tag {
-  display: inline-block;
-  padding: 0.2rem 0.7rem;
-  border-radius: 6px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  margin: 0.15rem;
-}
-
-.tag-en {
-  background: rgba(77,159,255,0.15);
-  color: var(--blue);
-  border: 1px solid rgba(77,159,255,0.3);
-  font-family: var(--font-en);
-  font-size: 0.75rem;
-}
-
-.tag-amber {
-  background: rgba(240,165,0,0.12);
-  color: var(--accent);
-  border: 1px solid rgba(240,165,0,0.3);
-}
-
-/* ===== TERMS GRID ===== */
-.terms-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 0.8rem;
-  margin: 1rem 0;
-}
-
-.term-card {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 1rem 1.2rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  position: relative;
-}
-
-.term-card:hover {
-  border-color: var(--accent);
-  background: var(--surface);
-}
-
-.term-en {
-  font-family: var(--font-en);
-  font-size: 0.85rem;
-  color: var(--teal);
-  font-weight: 700;
-  margin-bottom: 0.4rem;
-}
-
-.term-ar {
-  font-size: 0.9rem;
-  color: var(--text);
-  font-weight: 600;
-  margin-bottom: 0.3rem;
-}
-
-.term-desc {
-  font-size: 0.82rem;
-  color: var(--text3);
-  line-height: 1.5;
-}
-
-.term-why {
-  display: none;
-  margin-top: 0.6rem;
-  padding-top: 0.6rem;
-  border-top: 1px dashed var(--border);
-  font-size: 0.8rem;
-  color: var(--accent);
-}
-
-.term-card.flipped .term-why { display: block; }
-
-/* ===== TABLE ===== */
-.compare-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1rem 0;
-  font-size: 0.9rem;
-}
-
-.compare-table th {
-  background: var(--surface2);
-  padding: 0.8rem 1rem;
-  text-align: right;
-  color: var(--accent);
-  font-size: 0.85rem;
-  border-bottom: 2px solid var(--border);
-  font-weight: 700;
-}
-
-.compare-table td {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--border);
-  color: var(--text2);
-  vertical-align: top;
-}
-
-.compare-table tr:hover td { background: var(--bg3); }
-
-.compare-table .en-cell {
-  font-family: var(--font-en);
-  font-size: 0.82rem;
-  color: var(--teal);
-  font-weight: 700;
-}
-
-/* ===== QUIZ ===== */
-.quiz-section {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  margin-top: 1.5rem;
-}
-
-.quiz-title {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  font-size: 1rem;
-  font-weight: 700;
-  margin-bottom: 1.2rem;
-  color: var(--text);
-}
-
-.quiz-q {
-  margin-bottom: 1.5rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.quiz-q:last-child { border-bottom: none; padding-bottom: 0; }
-
-.quiz-q-text {
-  font-size: 0.95rem;
-  color: var(--text);
-  margin-bottom: 0.8rem;
-  line-height: 1.6;
-}
-
-.quiz-options {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.quiz-option {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.8rem;
-  padding: 0.7rem 1rem;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s;
-  color: var(--text2);
-  font-size: 0.9rem;
-  background: var(--surface);
-}
-
-.quiz-option:hover { border-color: var(--accent); color: var(--text); }
-
-.quiz-option input { display: none; }
-
-.quiz-option-label {
-  width: 22px; height: 22px;
-  border: 2px solid var(--border);
-  border-radius: 50%;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-en);
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--text3);
-  margin-top: 1px;
-}
-
-.quiz-option.selected {
-  border-color: var(--blue);
-  background: rgba(77,159,255,0.08);
-}
-
-.quiz-option.selected .quiz-option-label {
-  background: var(--blue);
-  border-color: var(--blue);
-  color: white;
-}
-
-.quiz-option.correct {
-  border-color: var(--green);
-  background: rgba(77,204,136,0.08);
-}
-
-.quiz-option.correct .quiz-option-label {
-  background: var(--green);
-  border-color: var(--green);
-  color: white;
-}
-
-.quiz-option.wrong {
-  border-color: var(--red);
-  background: rgba(255,91,91,0.08);
-}
-
-.quiz-btn {
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  border: none;
-  color: #000;
-  padding: 0.7rem 1.8rem;
-  border-radius: 8px;
-  font-family: var(--font-ar);
-  font-size: 0.9rem;
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: 1rem;
-  transition: all 0.2s;
-}
-
-.quiz-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-
-.quiz-feedback {
-  display: none;
-  margin-top: 0.8rem;
-  padding: 0.8rem 1rem;
-  border-radius: 8px;
-  font-size: 0.88rem;
-}
-
-.feedback-correct {
-  background: rgba(77,204,136,0.12);
-  border: 1px solid rgba(77,204,136,0.3);
-  color: var(--green);
-}
-
-.feedback-wrong {
-  background: rgba(255,91,91,0.12);
-  border: 1px solid rgba(255,91,91,0.3);
-  color: var(--red);
-}
-
-.quiz-score-display {
-  display: none;
-  text-align: center;
-  padding: 1.5rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  margin-top: 1rem;
-}
-
-.score-num {
-  font-family: var(--font-en);
-  font-size: 3rem;
-  font-weight: 700;
-  color: var(--accent);
-}
-
-/* ===== EXAM PRACTICE ===== */
-.exam-q {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  margin-bottom: 1.2rem;
-}
-
-.exam-source {
-  font-size: 0.75rem;
-  font-family: var(--font-en);
-  color: var(--text3);
-  margin-bottom: 0.8rem;
-}
-
-.exam-source span {
-  background: var(--bg3);
-  padding: 2px 8px;
-  border-radius: 4px;
-  margin-right: 0.4rem;
-}
-
-.show-answer-btn {
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--text2);
-  padding: 0.5rem 1.2rem;
-  border-radius: 8px;
-  font-family: var(--font-ar);
-  font-size: 0.85rem;
-  cursor: pointer;
-  margin-top: 0.8rem;
-  transition: all 0.2s;
-}
-
-.show-answer-btn:hover {
-  border-color: var(--teal);
-  color: var(--teal);
-}
-
-.answer-reveal {
-  display: none;
-  margin-top: 1rem;
-  padding: 1rem;
-  background: var(--bg3);
-  border-radius: 8px;
-  border: 1px solid var(--border);
-}
-
-.answer-correct-tag {
-  display: inline-block;
-  background: rgba(77,204,136,0.15);
-  color: var(--green);
-  border: 1px solid rgba(77,204,136,0.3);
-  padding: 2px 10px;
-  border-radius: 10px;
-  font-size: 0.78rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-
-/* ===== STEPS ===== */
-.steps-list {
-  list-style: none;
-  counter-reset: step;
-}
-
-.step-item {
-  counter-increment: step;
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  padding: 1rem 1.2rem;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-}
-
-.step-item::before {
-  content: counter(step);
-  width: 28px;
-  height: 28px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-en);
-  font-weight: 700;
-  font-size: 0.8rem;
-  color: #000;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.step-content h5 {
-  font-size: 0.95rem;
-  color: var(--text);
-  margin-bottom: 0.3rem;
-}
-
-.step-content p {
-  font-size: 0.88rem;
-  color: var(--text2);
-}
-
-/* ===== HIGHLIGHT ===== */
-.highlight-en {
-  font-family: var(--font-en);
-  background: rgba(0,212,170,0.1);
-  border: 1px solid rgba(0,212,170,0.25);
-  color: var(--teal);
-  padding: 1px 6px;
-  border-radius: 4px;
-  font-size: 0.87em;
-  font-weight: 700;
-}
-
-.highlight-amber {
-  background: rgba(240,165,0,0.12);
-  color: var(--accent);
-  padding: 1px 6px;
-  border-radius: 4px;
-  font-weight: 600;
-}
-
-/* ===== DIVIDER ===== */
-.divider {
-  height: 1px;
-  background: var(--border);
-  margin: 2.5rem 0;
-}
-
-/* ===== RECAP ===== */
-.recap-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 0.8rem;
-  margin: 1rem 0;
-}
-
-.recap-item {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 1rem;
-  transition: all 0.2s;
-}
-
-.recap-item:hover {
-  border-color: var(--teal);
-  transform: translateY(-2px);
-}
-
-.recap-item .ri-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
-.recap-item h5 { font-size: 0.9rem; color: var(--text); margin-bottom: 0.3rem; }
-.recap-item p { font-size: 0.82rem; color: var(--text2); }
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 900px) {
-  .layout {
-    grid-template-columns: 1fr;
-  }
-  .sidebar {
-    display: none;
-  }
-  main {
-    padding: 1.5rem;
-  }
-}
-
-/* ===== ANIMATIONS ===== */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.section { animation: fadeIn 0.4s ease both; }
-
-/* ===== SEARCH HIGHLIGHT ===== */
-.search-highlight {
-  background: rgba(240,165,0,0.3);
-  border-radius: 3px;
-  padding: 0 2px;
-}
-
-/* ===== MOBILE NAV ===== */
-.mobile-nav {
-  display: none;
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  background: var(--bg2);
-  border-top: 1px solid var(--border);
-  z-index: 100;
-  padding: 0.5rem;
-  gap: 0.3rem;
-  overflow-x: auto;
-  white-space: nowrap;
-}
-
-@media (max-width: 900px) {
-  .mobile-nav { display: flex; }
-  main { padding-bottom: 60px; }
-}
-
-.mobile-nav a {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  padding: 0.4rem 0.8rem;
-  border-radius: 8px;
-  text-decoration: none;
-  color: var(--text3);
-  font-size: 0.65rem;
-  transition: all 0.2s;
-}
-
-.mobile-nav a:hover, .mobile-nav a.active {
-  background: var(--surface);
-  color: var(--accent);
-}
-
-.mobile-nav a .m-icon { font-size: 1.1rem; }
-
-/* ===== REQUIREMENTS TYPE VISUAL ===== */
-.req-types {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin: 1rem 0;
-}
-
-.req-type-card {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 1.2rem;
-}
-
-.req-type-card h5 {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.92rem;
-  color: var(--text);
-  margin-bottom: 0.6rem;
-}
-
-.req-type-card ul {
-  padding-right: 1.2rem;
-}
-
-.req-type-card li {
-  font-size: 0.85rem;
-  color: var(--text2);
-  margin-bottom: 0.3rem;
-}
-
-@media (max-width: 600px) {
-  .req-types { grid-template-columns: 1fr; }
-  .terms-grid { grid-template-columns: 1fr; }
-  .hero h1 { font-size: 1.6rem; }
-}
-</style>
-</head>
-<body>
-
-<div id="progress-bar"></div>
-
-<!-- HEADER -->
-<header>
-  <div class="header-inner">
-    <div class="logo">CS251 <span>// RE</span></div>
-    <div class="search-box">
-      <span>🔍</span>
-      <input type="text" id="search-input" placeholder="ابحث في المحتوى..." oninput="searchContent(this.value)">
-    </div>
-    <div class="logo" style="font-size:0.75rem; color:var(--text3);">Dr. M. El-Ramly</div>
-  </div>
-</header>
-
-<div class="layout">
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <h3>المحتوى</h3>
-    <nav>
-      <a href="#hero" class="active"><span class="icon">🏠</span> نظرة عامة<span class="num">0</span></a>
-      <a href="#s0"><span class="icon">🚀</span> ما قبل المشروع<span class="num">1</span></a>
-      <a href="#s1"><span class="icon">🔍</span> Domain Analysis<span class="num">2</span></a>
-      <a href="#s2"><span class="icon">📋</span> Requirements Engineering<span class="num">3</span></a>
-      <a href="#s3"><span class="icon">🎯</span> أنواع المتطلبات<span class="num">4</span></a>
-      <a href="#s4"><span class="icon">📝</span> مراحل الـ RE<span class="num">5</span></a>
-      <a href="#s5"><span class="icon">📄</span> طرق التوثيق<span class="num">6</span></a>
-      <a href="#s6"><span class="icon">🎭</span> Use Cases<span class="num">7</span></a>
-      <a href="#s7"><span class="icon">📊</span> مقارنة الطرق<span class="num">8</span></a>
-      <a href="#terms"><span class="icon">📚</span> المصطلحات<span class="num">9</span></a>
-      <a href="#recap"><span class="icon">⚡</span> مراجعة سريعة<span class="num">10</span></a>
-      <a href="#exam"><span class="icon">🏆</span> أسئلة الامتحانات<span class="num">11</span></a>
-      <a href="#quiz-main"><span class="icon">🎮</span> تدريب تفاعلي<span class="num">12</span></a>
-    </nav>
-  </aside>
-
-  <!-- MAIN -->
-  <main id="content">
-
-    <!-- HERO -->
-    <div class="hero" id="hero">
-      <div class="hero-badge">CS251 – Software Engineering I / Winter 2026</div>
-      <h1>Requirements Engineering<br>هندسة المتطلبات</h1>
-      <p>المحاضرة دي هتعلمك إزاي تفهم وتجمع وتوثق متطلبات أي نظام سوفتوير... وهي الخطوة الأهم قبل ما تكتب سطر كود واحد.</p>
-      <div class="hero-stats">
-        <div class="stat"><div class="stat-num">5</div><div class="stat-label">مراحل الـ RE</div></div>
-        <div class="stat"><div class="stat-num">6</div><div class="stat-label">طرق توثيق</div></div>
-        <div class="stat"><div class="stat-num">4</div><div class="stat-label">أنواع متطلبات</div></div>
-        <div class="stat"><div class="stat-num">15+</div><div class="stat-label">سؤال امتحانات</div></div>
-      </div>
-    </div>
-
-    <!-- ======================== SECTION 0: Pre-Project ======================== -->
-    <div class="section" id="s0">
-      <div class="section-header">
-        <div class="section-icon icon-amber">🚀</div>
-        <div>
-          <div class="section-title">أنشطة ما قبل المشروع</div>
-          <div class="section-num">Pre-Project Activities</div>
-        </div>
-      </div>
-
-      <div class="card card-summary">
-        <div class="card-label label-blue">📋 ملخص سريع</div>
-        <p>قبل ما تبدأ أي مشروع سوفتوير، لازم تعمل 4 خطوات أساسية: تحليل السوق، تحديد العملاء المستهدفين، دراسة الجدوى، وبعدين تعمل خطة عمل واضحة.</p>
-      </div>
-
-      <div class="explain-block open">
-        <div class="explain-toggle" onclick="toggleExplain(this)">
-          <div class="explain-toggle-title">🔎 شرح مفصل</div>
-          <div class="explain-arrow">▼</div>
-        </div>
-        <div class="explain-content">
-          <p>يا معلم، تخيل إنك عايز تعمل app جديدة... هتبدأ مباشرة تكود؟ لأ! في خطوات مهمة قبل كده.</p>
-
-          <p><strong style="color:var(--teal)">1. Market / Gap Analysis</strong> – بتشوف السوق عامل إزاي في الموضوع ده، وإيه الـ "gap" يعني الفراغ اللي مفيش حاجة بتملاه. مثلاً: في مصر فيه gap في موضوع الـ mobile payments للمحتاجينش بنوك.</p>
-
-          <p><strong style="color:var(--teal)">2. Market Segmentation</strong> – مين اللي هيستخدم الـ app دي؟ طلاب جامعة؟ أصحاب مشاريع صغيرة؟ ناس في الريف؟ محتاج تحدد الـ demographics (السن، الدخل، مستوى التعليم).</p>
-
-          <p><strong style="color:var(--teal)">3. Feasibility Study</strong> – هل المشروع ده ممكن فعلاً؟ في 4 أنواع من الجدوى:
-          <br>- <strong>Technical</strong>: التكنولوجيا والـ skills موجودة؟
-          <br>- <strong>Economic</strong>: هيكلف قد إيه؟ هيرجع كام؟ (ROI)
-          <br>- <strong>Legal</strong>: في قوانين بتمنعه؟
-          <br>- <strong>Schedule</strong>: ينتهي في الوقت المطلوب؟</p>
-
-          <p><strong style="color:var(--teal)">4. High-Level Business Plan</strong> – خطة شاملة بـ:
-          <br>- <strong>Project Goals</strong>: أهداف SMART (Specific, Measurable, Achievable, Relevant, Time-bound)
-          <br>- <strong>Value Proposition</strong>: إيه اللي بيميزك عن المنافسين؟
-          <br>- <strong>Financial Outlook</strong>: تكاليف التطوير والتشغيل والإيرادات المتوقعة</p>
-        </div>
-      </div>
-
-      <div class="card card-exam">
-        <div class="card-label label-red">⚠️ خد بالك امتحانياً</div>
-        <ul>
-          <li>الـ <strong>SMART goals</strong> = Specific, Measurable, Achievable, Relevant, Time-bound – احفظها كويس</li>
-          <li>الـ <strong>Value Proposition</strong> بتوضح إيه اللي يميز المنتج عن المنافسين</li>
-          <li>الـ <strong>Feasibility Study</strong> بيشمل 4 أنواع: Technical, Economic, Legal, Schedule</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- ======================== SECTION 1: Domain Analysis ======================== -->
-    <div class="section" id="s1">
-      <div class="section-header">
-        <div class="section-icon icon-blue">🔍</div>
-        <div>
-          <div class="section-title">تحليل المجال</div>
-          <div class="section-num">Domain Analysis</div>
-        </div>
-      </div>
-
-      <div class="card card-definition">
-        <div class="card-label label-green">📖 تعريف</div>
-        <h4>Domain Analysis</h4>
-        <p>هو العملية اللي المهندس بيتعلم فيها عن مجال الـ domain عشان يفهم المشكلة بشكل أعمق. الـ domain هو المجال العام اللي هيشتغل فيه البرنامج.</p>
-      </div>
-
-      <div class="explain-block">
-        <div class="explain-toggle" onclick="toggleExplain(this)">
-          <div class="explain-toggle-title">🎯 ليه Domain Analysis مهم؟</div>
-          <div class="explain-arrow">▼</div>
-        </div>
-        <div class="explain-content">
-          <p>مثلاً: عايز تعمل نظام لمستشفى. مش هتقدر تصمم النظام صح غير لو فهمت كويس إزاي المستشفى بتشتغل، إيه العمليات الموجودة، مين الناس اللي بتستخدمه...</p>
-          <ul>
-            <li><strong style="color:var(--green)">Faster Development</strong> – لما تفهم المجال، بتكتب كود أسرع</li>
-            <li><strong style="color:var(--green)">Better System</strong> – النظام بيبقى أكثر ملاءمة لاحتياجات الناس</li>
-            <li><strong style="color:var(--green)">Avoiding Misunderstanding</strong> – بتتجنب سوء الفهم مع العميل</li>
-            <li><strong style="color:var(--green)">Anticipation of Extensions</strong> – بتقدر تتوقع التطويرات المستقبلية</li>
-          </ul>
-          <p><strong>ومين الـ Domain Expert؟</strong> هو الشخص اللي عنده معرفة عميقة جداً في المجال ده. في سؤال امتحان 2022: "The person that is going to be the source of knowledge about the field..." – الجواب: <strong style="color:var(--accent)">Domain Expert</strong></p>
-        </div>
-      </div>
-
-      <div class="card card-warning">
-        <div class="card-label label-amber">📄 محتوى وثيقة Domain Analysis</div>
-        <ul>
-          <li><strong>A. Introduction</strong> – مقدمة عامة</li>
-          <li><strong>B. Glossary</strong> – قاموس المصطلحات الخاصة بالمجال</li>
-          <li><strong>C. General Knowledge</strong> – معلومات عامة عن المجال</li>
-          <li><strong>D. Customers & Users</strong> – مين العملاء والمستخدمين</li>
-          <li><strong>E. The Environment</strong> – البيئة اللي بيشتغل فيها النظام</li>
-          <li><strong>F. Tasks & Procedures</strong> – العمليات الموجودة حالياً</li>
-          <li><strong>G. Competing Software</strong> – البرامج المنافسة</li>
-          <li><strong>H. Similarities to Other Domains</strong> – التشابه مع مجالات تانية</li>
-        </ul>
-      </div>
-
-      <div class="card card-exam">
-        <div class="card-label label-red">💡 سؤال امتحان 2022</div>
-        <p><strong>Q7:</strong> The person that is going to be the source of knowledge about the field I am writing an application for and will give me all the needed information is called:</p>
-        <p style="margin-top:0.5rem; color:var(--green)">✅ الجواب: <strong>Domain Expert</strong></p>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- ======================== SECTION 2: RE Overview ======================== -->
-    <div class="section" id="s2">
-      <div class="section-header">
-        <div class="section-icon icon-teal">📋</div>
-        <div>
-          <div class="section-title">هندسة المتطلبات</div>
-          <div class="section-num">Requirements Engineering (RE)</div>
-        </div>
-      </div>
-
-      <div class="card card-definition">
-        <div class="card-label label-green">📖 تعريف أساسي</div>
-        <h4>Requirement ما هو؟</h4>
-        <p>هو statement بيوصف: (1) جانب من اللي المفروض النظام يعمله، أو (2) constraint على عملية التطوير. ولازم يساهم في حل مشكلة العميل.</p>
-        <p style="margin-top:0.6rem">مجموع كل الـ requirements بيتسمى <strong class="highlight-en">SRS</strong> (Software Requirements Specification).</p>
-      </div>
-
-      <div class="card card-definition">
-        <div class="card-label label-green">📖 تعريف Requirements Engineering</div>
-        <p>هو عملية تعريف وتوثيق وصيانة متطلبات النظام. هو أساس كل مراحل تطوير السوفتوير لأنه بيحدد إيه اللي المفروض ينبني.</p>
-      </div>
-
-      <div class="explain-block">
-        <div class="explain-toggle" onclick="toggleExplain(this)">
-          <div class="explain-toggle-title">👥 مين هم الـ Stakeholders؟</div>
-          <div class="explain-arrow">▼</div>
-        </div>
-        <div class="explain-content">
-          <p>الـ <strong>Stakeholder</strong> هو أي شخص أو مجموعة عندهم مصلحة في النظام:</p>
-          <ul>
-            <li><strong style="color:var(--accent)">Client (العميل)</strong> – صاحب الفلوس اللي بيدفع</li>
-            <li><strong style="color:var(--teal)">End Users</strong> – اللي هيستخدم النظام فعلاً</li>
-            <li><strong style="color:var(--blue)">Developers</strong> – المهندسين اللي بيبنوا النظام</li>
-            <li><strong style="color:var(--purple)">Managers</strong> – المدراء</li>
-            <li><strong style="color:var(--pink)">Regulatory Bodies</strong> – هيئات حكومية أو قانونية</li>
-          </ul>
-          <p>خد بالك: الـ client ≠ الـ end user دايماً! مثلاً: وزارة الصحة هي الـ client، لكن الـ end users هم الأطباء والممرضين.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- ======================== SECTION 3: Types of Requirements ======================== -->
-    <div class="section" id="s3">
-      <div class="section-header">
-        <div class="section-icon icon-purple">🎯</div>
-        <div>
-          <div class="section-title">أنواع المتطلبات</div>
-          <div class="section-num">Types of Requirements</div>
-        </div>
-      </div>
-
-      <div class="req-types">
-        <div class="req-type-card">
-          <h5>⚙️ <span style="color:var(--blue)">Functional Requirements</span></h5>
-          <p style="font-size:0.85rem; color:var(--text2); margin-bottom:0.6rem">بتحدد إيه اللي النظام بيعمله</p>
-          <ul>
-            <li>تسجيل الدخول</li>
-            <li>البحث عن منتج</li>
-            <li>إضافة للسلة</li>
-            <li>إتمام الشراء</li>
-          </ul>
-        </div>
-        <div class="req-type-card">
-          <h5>✨ <span style="color:var(--teal)">Non-Functional Requirements</span></h5>
-          <p style="font-size:0.85rem; color:var(--text2); margin-bottom:0.6rem">بتحدد إزاي النظام بيشتغل</p>
-          <ul>
-            <li>Performance (سرعة)</li>
-            <li>Security (أمان)</li>
-            <li>Scalability (قابلية التوسع)</li>
-            <li>Usability (سهولة الاستخدام)</li>
-          </ul>
-        </div>
-        <div class="req-type-card">
-          <h5>📊 <span style="color:var(--accent)">Business Requirements</span></h5>
-          <p style="font-size:0.85rem; color:var(--text2); margin-bottom:0.6rem">أهداف المنظمة الكبيرة</p>
-          <ul>
-            <li>زيادة مبيعات 20%</li>
-            <li>تقليل التكاليف</li>
-            <li>الوصول لشريحة جديدة</li>
-          </ul>
-        </div>
-        <div class="req-type-card">
-          <h5>🔄 <span style="color:var(--green)">Transition Requirements</span></h5>
-          <p style="font-size:0.85rem; color:var(--text2); margin-bottom:0.6rem">مؤقتة أثناء الانتقال للنظام الجديد</p>
-          <ul>
-            <li>تدريب الموظفين</li>
-            <li>تحويل البيانات القديمة</li>
-            <li>تشغيل النظامين معاً</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="card card-tip">
-        <div class="card-label label-purple">🎓 فكرة مهمة امتحانياً</div>
-        <p>الـ <strong>Non-Functional Requirements</strong> بتنقسم لـ:</p>
-        <ul style="margin-top:0.5rem">
-          <li><strong>Software Quality requirements</strong> – مستوى الجودة</li>
-          <li><strong>Platform requirements</strong> – قيود بيئة التشغيل</li>
-          <li><strong>Process requirements</strong> – قيود على طريقة التطوير</li>
-        </ul>
-        <p style="margin-top:0.6rem; color:var(--accent)">سؤال 2022: "The system will be able to print to an LC-9 plotter" → <strong>Platform requirement</strong> (مش Functional!)</p>
-      </div>
-
-      <div class="explain-block">
-        <div class="explain-toggle" onclick="toggleExplain(this)">
-          <div class="explain-toggle-title">✅ خصائص المتطلب الكويس (Good Requirement)</div>
-          <div class="explain-arrow">▼</div>
-        </div>
-        <div class="explain-content">
-          <ul>
-            <li><strong style="color:var(--green)">Complete (مكتمل)</strong> – بيحتوي على كل المعلومات اللازمة للتنفيذ والاختبار</li>
-            <li><strong style="color:var(--blue)">Unambiguous (واضح)</strong> – له تفسير واحد بس، مش متعدد التفسيرات</li>
-            <li><strong style="color:var(--teal)">Consistent (متسق)</strong> – مش بيتعارض مع متطلبات تانية</li>
-            <li><strong style="color:var(--purple)">Verifiable (قابل للتحقق)</strong> – تقدر تختبره وتتأكد منه</li>
-            <li><strong style="color:var(--accent)">Traceable (قابل للتتبع)</strong> – ترجعه لمصدره وتربطه بأهداف المشروع</li>
-          </ul>
-
-          <p style="margin-top:0.8rem"><strong style="color:var(--red)">مثال متطلب غير متسق (Inconsistency):</strong></p>
-          <p>• "النظام يسمح بالشراء بنقرة واحدة وحفظ بيانات الكارت"</p>
-          <p>• "النظام لا يحفظ بيانات الكارت بعد الشراء" ← هنا تناقض! ده Inconsistency.</p>
-
-          <p style="margin-top:0.8rem"><strong style="color:var(--red)">مثال متطلب غير قابل للتحقق:</strong></p>
-          <p>❌ "النظام يجب أن يكون سريعاً وآمناً" – مش قابل للقياس</p>
-          <p>✅ "النظام يعالج 1000 transaction/second" – قابل للقياس</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- ======================== SECTION 4: RE Process ======================== -->
-    <div class="section" id="s4">
-      <div class="section-header">
-        <div class="section-icon icon-green">📝</div>
-        <div>
-          <div class="section-title">مراحل هندسة المتطلبات</div>
-          <div class="section-num">Requirements Engineering Process</div>
-        </div>
-      </div>
-
-      <div class="card card-exam">
-        <div class="card-label label-red">⭐ مهم جداً – الترتيب الصح!</div>
-        <p>الترتيب الصح للمراحل حسب الامتحانات:</p>
-        <p style="margin-top:0.5rem; font-family:var(--font-en); font-size:0.9rem; color:var(--teal)">Elicitation → Analysis/Negotiation → Specification/Documentation → Validation → Management</p>
-        <p style="margin-top:0.5rem; color:var(--accent)">سؤال 2022 Q8: الجواب = (d) Elicitation, negotiation, documentation, validation ✅</p>
-      </div>
-
-      <ul class="steps-list">
-        <li class="step-item">
-          <div class="step-content">
-            <h5>Requirements Elicitation (جمع المتطلبات)</h5>
-            <p>جمع المعلومات من الـ stakeholders بكل الطرق المتاحة: Interviews, Surveys, Brainstorming, Focus Groups, Observation, Prototyping, Use Cases</p>
-          </div>
-        </li>
-        <li class="step-item">
-          <div class="step-content">
-            <h5>Requirements Analysis / Negotiation (التحليل والتفاوض)</h5>
-            <p>بعد الجمع، بنفحص المتطلبات: إيه اللي بيتعارض؟ إيه الأولويات؟ إيه المبهم؟ وبنتفاوض مع الـ stakeholders.</p>
-          </div>
-        </li>
-        <li class="step-item">
-          <div class="step-content">
-            <h5>Requirements Specification / Documentation (التوثيق)</h5>
-            <p>توثيق المتطلبات بشكل رسمي: SRS، Use Cases، User Stories، EARS...</p>
-          </div>
-        </li>
-        <li class="step-item">
-          <div class="step-content">
-            <h5>Requirements Validation (التحقق)</h5>
-            <p>التأكد إن المتطلبات بتطابق فعلاً احتياجات الـ stakeholders: Reviews, Prototypes, Simulations, User Feedback</p>
-          </div>
-        </li>
-        <li class="step-item">
-          <div class="step-content">
-            <h5>Requirements Management (الإدارة)</h5>
-            <p>عملية مستمرة: تتابع التغييرات، Traceability، Version Control للمتطلبات.</p>
-          </div>
-        </li>
-      </ul>
-
-      <div class="explain-block">
-        <div class="explain-toggle" onclick="toggleExplain(this)">
-          <div class="explain-toggle-title">🧠 طرق جمع المتطلبات بالتفصيل</div>
-          <div class="explain-arrow">▼</div>
-        </div>
-        <div class="explain-content">
-          <p><strong style="color:var(--teal)">Interviews:</strong> مقابلات مع الـ stakeholders. تسأل عن التفاصيل، الـ vision، أفكار بديلة، وبتطلب منهم يرسموا diagrams.</p>
-          <p><strong style="color:var(--teal)">Brainstorming:</strong> جلسة جماعية بمشرف (moderator). كل واحد يكتب أفكاره ويمرر الورقة للجنبه. بتجيب أفكار مش ممكن تيجي في مقابلة فردية.</p>
-          <p><strong style="color:var(--teal)">Prototyping:</strong> عرض نماذج أولية (حتى لو مجرد صور) للمستخدمين عشان يتخيلوا النظام.</p>
-          <p><strong style="color:var(--teal)">Use Case Analysis:</strong> تحديد الـ actors والعمليات اللي بيعملوها مع النظام.</p>
-        </div>
-      </div>
-
-      <div class="card card-tip">
-        <div class="card-label label-purple">⚠️ تحديات الـ RE</div>
-        <ul>
-          <li><strong>Ambiguity</strong> – متطلبات مبهمة</li>
-          <li><strong>Conflicting Requirements</strong> – متطلبات متعارضة بين stakeholders مختلفة</li>
-          <li><strong>Incomplete Requirements</strong> – متطلبات ناقصة</li>
-          <li><strong>Changing Requirements</strong> – المتطلبات بتتغير طول الوقت</li>
-          <li><strong>Communication Barriers</strong> – اختلاف المصطلحات بين الـ stakeholders</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- ======================== SECTION 5: Methods for Documenting ======================== -->
-    <div class="section" id="s5">
-      <div class="section-header">
-        <div class="section-icon icon-amber">📄</div>
-        <div>
-          <div class="section-title">طرق توثيق المتطلبات</div>
-          <div class="section-num">Methods for Specifying Requirements</div>
-        </div>
-      </div>
-
-      <div class="explain-block open">
-        <div class="explain-toggle" onclick="toggleExplain(this)">
-          <div class="explain-toggle-title">1️⃣ Natural Language (اللغة الطبيعية)</div>
-          <div class="explain-arrow">▼</div>
-        </div>
-        <div class="explain-content">
-          <p>ببساطة: بتكتب المتطلبات بالعربي أو الإنجليزي العادي. أسهل طريقة لكن ممكن تكون مبهمة.</p>
-          <p style="color:var(--text3); font-style:italic">مثال: "النظام يسمح للمستخدمين بتسجيل الدخول باسم المستخدم وكلمة السر."</p>
-        </div>
-      </div>
-
-      <div class="explain-block">
-        <div class="explain-toggle" onclick="toggleExplain(this)">
-          <div class="explain-toggle-title">2️⃣ IEEE SRS Template (الوثيقة الرسمية)</div>
-          <div class="explain-arrow">▼</div>
-        </div>
-        <div class="explain-content">
-          <p>وثيقة منظمة بمعيار IEEE 830-1998 بتشمل:</p>
-          <ul>
-            <li><strong>Section 1 – Introduction:</strong> Purpose, Scope, Definitions, References, Overview</li>
-            <li><strong>Section 2 – Overall Description:</strong> Product Perspective, Functions, User Characteristics, Constraints, Assumptions</li>
-            <li><strong>Section 3 – Specific Requirements:</strong> External Interfaces, Functional Req., Performance, Design Constraints, Quality Req.</li>
-          </ul>
-          <p style="color:var(--accent); margin-top:0.6rem">في تحديث أحدث: IEEE 29148-2011</p>
-        </div>
-      </div>
-
-      <div class="explain-block">
-        <div class="explain-toggle" onclick="toggleExplain(this)">
-          <div class="explain-toggle-title">3️⃣ Formal Specifications (المواصفات الرسمية)</div>
-          <div class="explain-arrow">▼</div>
-        </div>
-        <div class="explain-content">
-          <p>بتستخدم رياضيات أو pseudocode أو لغات زي Z language عشان تكون دقيقة جداً ومش قابلة لتفسيرات متعددة.</p>
-          <p>بتُستخدم في: الأنظمة الحرجة (Critical Systems) اللي أي error فيها ممكن يسبب كوارث زي أنظمة الطيران أو المستشفيات.</p>
-        </div>
-      </div>
-
-      <div class="explain-block">
-        <div class="explain-toggle" onclick="toggleExplain(this)">
-          <div class="explain-toggle-title">4️⃣ User Stories (قصص المستخدم)</div>
-          <div class="explain-arrow">▼</div>
-        </div>
-        <div class="explain-content">
-          <p>طريقة مشهورة في الـ Agile وScrum. الصيغة:</p>
-          <p style="background:var(--bg2); padding:0.8rem; border-radius:8px; font-family:var(--font-en); font-size:0.85rem; margin:0.6rem 0; border:1px solid var(--border)">As a [user type],<br>I want to [action],<br>so that [benefit].</p>
-          <p>وبتتضمن <strong>Acceptance Criteria</strong> = شروط القبول اللي بتحدد امتى نعتبر الـ story منتهية.</p>
-          <p style="color:var(--red); margin-top:0.6rem">⚠️ User Story المبهمة: "As a user, I want the UI to be friendly and modern" – ده مبهم ومش قابل للاختبار!</p>
-          <p style="color:var(--accent)">سؤال 2025 Q3: أكثر user story vague = الإجابة (c) "I want the UI to be friendly and modern"</p>
-        </div>
-      </div>
-
-      <div class="explain-block">
-        <div class="explain-toggle" onclick="toggleExplain(this)">
-          <div class="explain-toggle-title">4.5️⃣ Enriched User Stories</div>
-          <div class="explain-arrow">▼</div>
-        </div>
-        <div class="explain-content">
-          <p>خليط من User Story + Prototype + Data Dictionary + Use Case + Acceptance Criteria.</p>
-          <p>الميزة: بتحسن التواصل بين الفريق كله وتعطي فهم واضح لكل تفاصيل الـ story.</p>
-        </div>
-      </div>
-
-      <div class="explain-block">
-        <div class="explain-toggle" onclick="toggleExplain(this)">
-          <div class="explain-toggle-title">5️⃣ Use Cases (من الـ UML)</div>
-          <div class="explain-arrow">▼</div>
-        </div>
-        <div class="explain-content">
-          <p>بتوصف التفاعل بين المستخدم والنظام خطوة بخطوة. بتشمل:</p>
-          <ul>
-            <li><strong>Name:</strong> اسم الـ Use Case</li>
-            <li><strong>Actors:</strong> مين اللي بيشارك</li>
-            <li><strong>Preconditions:</strong> الشروط قبل البدء</li>
-            <li><strong>Main Flow:</strong> الخطوات الأساسية</li>
-            <li><strong>Alternative Flows:</strong> السيناريوهات البديلة والأخطاء</li>
-            <li><strong>Postconditions:</strong> حالة النظام بعد الانتهاء</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="explain-block">
-        <div class="explain-toggle" onclick="toggleExplain(this)">
-          <div class="explain-toggle-title">6️⃣ EARS Method</div>
-          <div class="explain-arrow">▼</div>
-        </div>
-        <div class="explain-content">
-          <p>اختصار Easy Approach to Requirements Syntax. بتستخدم قالب محدد:</p>
-          <p style="background:var(--bg2); padding:0.8rem; border-radius:8px; font-family:var(--font-en); font-size:0.85rem; margin:0.6rem 0; border:1px solid var(--border)">
-            <strong style="color:var(--teal)">When</strong> [pre-condition/trigger]<br>
-            <strong style="color:var(--blue)">then</strong> [system response]<br>
-            <strong style="color:var(--accent)">If</strong> [condition]<br>
-            <strong style="color:var(--blue)">then</strong> [response]<br>
-            <strong style="color:var(--red)">Else</strong> [alternative response]
-          </p>
-          <p>الميزة: دقيق وقابل للاختبار، وفي نفس الوقت بسيط وسهل للقراءة.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- ======================== SECTION 6: Use Cases ======================== -->
-    <div class="section" id="s6">
-      <div class="section-header">
-        <div class="section-icon icon-pink">🎭</div>
-        <div>
-          <div class="section-title">Use Cases بالتفصيل</div>
-          <div class="section-num">Use Case Modeling</div>
-        </div>
-      </div>
-
-      <div class="card card-summary">
-        <div class="card-label label-blue">📋 الهدف</div>
-        <p>Use Case Modeling بتنظر للنظام من زاوية المستخدم: إزاي يتفاعل معاه وإيه اللي يحاول يوصله.</p>
-      </div>
-
-      <div class="explain-block open">
-        <div class="explain-toggle" onclick="toggleExplain(this)">
-          <div class="explain-toggle-title">🎭 خطوات بناء Use Case Model</div>
-          <div class="explain-arrow">▼</div>
-        </div>
-        <div class="explain-content">
-          <p><strong style="color:var(--accent)">Step 1: تحديد الـ Actors</strong></p>
-          <p>الـ Actor هو كيان بيتفاعل مع النظام. اسأل:</p>
-          <ul>
-            <li>مين اللي بيستخدم النظام؟</li>
-            <li>مين اللي بيشغله أو بيقفله؟</li>
-            <li>مين بييجي منه معلومات؟</li>
-            <li>مين بياخد منه معلومات؟</li>
-            <li>في أنظمة تانية بتتكلم معاه؟</li>
-          </ul>
-          <p style="margin-top:0.6rem"><strong style="color:var(--accent)">Step 2: تحديد الـ Use Cases</strong></p>
-          <p>بعد ما حددت الـ actors، اسأل: إيه اللي كل actor هيعمله مع النظام؟</p>
-          <p style="margin-top:0.6rem"><strong style="color:var(--accent)">Step 3: رسم Use Case Diagram</strong></p>
-          <p>دايرة بيض = Use Case، آدمي = Actor، خط = علاقة.</p>
-        </div>
-      </div>
-
-      <div class="card card-tip">
-        <div class="card-label label-purple">📐 مكونات الـ Use Case</div>
-        <ul>
-          <li><strong>Name</strong> – اسم واضح ومختصر</li>
-          <li><strong>Actors</strong> – من يشارك؟</li>
-          <li><strong>Goals</strong> – ما الذي يحاول المستخدم تحقيقه؟</li>
-          <li><strong>Preconditions</strong> – ما يجب أن يكون صحيحاً قبل البدء</li>
-          <li><strong>Summary</strong> – وصف مختصر</li>
-          <li><strong>Steps</strong> – تنسيق عمودين: Actor Actions | System Responses</li>
-          <li><strong>Postconditions</strong> – حالة النظام بعد الانتهاء</li>
-          <li><strong>Alternative Flows</strong> – السيناريوهات الاستثنائية</li>
-        </ul>
-      </div>
-
-      <div class="card card-definition">
-        <div class="card-label label-green">📖 مثال: Use Case "Check Out Item" (Library)</div>
-        <p><strong>Actor:</strong> Clerk</p>
-        <p><strong>Goal:</strong> إعارة كتاب لمستعير</p>
-        <p><strong>Preconditions:</strong> المستخدم مسموح له بالاستعارة</p>
-        <p><strong>Main Flow:</strong> Clerk يدخل ID → النظام يفتح صفحة المستخدم → Clerk يسكن باركود الكتاب → النظام يضيف الكتاب لسجل الاستعارة</p>
-        <p><strong>Exceptional Flow:</strong> لو المستخدم موقوف، زرار الاستعارة يكون disabled</p>
-      </div>
-
-      <div class="card card-exam">
-        <div class="card-label label-red">💡 Use Case – قاعدة مهمة</div>
-        <ul>
-          <li>بيغطي التسلسل الكامل من أول المهمة لآخرها</li>
-          <li>بيوصف تفاعل المستخدم مع النظام <strong>فقط</strong> (مش العمليات الداخلية)</li>
-          <li>بيتكتب مستقل عن تصميم الـ UI قدر الإمكان</li>
-          <li>فقط actions المستخدم-النظام، مش العمليات اليدوية أو الداخلية البحتة</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- ======================== SECTION 7: Comparison ======================== -->
-    <div class="section" id="s7">
-      <div class="section-header">
-        <div class="section-icon icon-blue">📊</div>
-        <div>
-          <div class="section-title">مقارنة طرق التوثيق</div>
-          <div class="section-num">Comparison of Methods</div>
-        </div>
-      </div>
-
-      <table class="compare-table">
-        <thead>
-          <tr>
-            <th>الطريقة</th>
-            <th>الخصائص</th>
-            <th>متى تستخدمها؟</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="en-cell">Natural Language</td>
-            <td>سهلة لكن ممكن تكون مبهمة</td>
-            <td>المناقشات الأولية أو الجمهور العام</td>
-          </tr>
-          <tr>
-            <td class="en-cell">Formal Specs (Z Language)</td>
-            <td>دقيقة جداً، مش قابلة للغموض، قابلة للآلة</td>
-            <td>الأنظمة الحرجة والتحقق الرسمي</td>
-          </tr>
-          <tr>
-            <td class="en-cell">User Stories</td>
-            <td>بسيطة، مركزة على المستخدم، مع Acceptance Criteria</td>
-            <td>Agile Development، Product Backlog</td>
-          </tr>
-          <tr>
-            <td class="en-cell">Use Cases</td>
-            <td>تصف التفاعل خطوة بخطوة</td>
-            <td>نمذجة سلوك النظام، OOP Design</td>
-          </tr>
-          <tr>
-            <td class="en-cell">EARS Method</td>
-            <td>منظم وبسيط، دقيق وقابل للاختبار</td>
-            <td>لما تحتاج دقة مع بساطة</td>
-          </tr>
-          <tr>
-            <td class="en-cell">IEEE SRS</td>
-            <td>وثيقة كاملة رسمية</td>
-            <td>المشاريع الكبيرة والرسمية</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="card card-tip">
-        <div class="card-label label-purple">🔑 قاعدة بسيطة</div>
-        <p>من الأقل دقة للأكثر دقة:</p>
-        <p style="margin-top:0.5rem; font-family:var(--font-en); font-size:0.85rem; color:var(--teal)">Natural Language ← → Formal Specs (Z)</p>
-        <p style="color:var(--text2); margin-top:0.4rem">User Stories و Use Cases و EARS في المنتصف بدرجات متفاوتة</p>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- ======================== TERMS ======================== -->
-    <div class="section" id="terms">
-      <div class="section-header">
-        <div class="section-icon icon-teal">📚</div>
-        <div>
-          <div class="section-title">المصطلحات المهمة</div>
-          <div class="section-num">Key Terms – اضغط لتعرف أكثر</div>
-        </div>
-      </div>
-
-      <div class="terms-grid">
-        <div class="term-card" onclick="flipTerm(this)">
-          <div class="term-en">Domain Analysis</div>
-          <div class="term-ar">تحليل المجال</div>
-          <div class="term-desc">عملية تعلم المهندس عن مجال العمل</div>
-          <div class="term-why">💡 امتحانياً: الـ Domain Expert هو المصدر الرئيسي للمعلومات</div>
-        </div>
-        <div class="term-card" onclick="flipTerm(this)">
-          <div class="term-en">Requirements Engineering</div>
-          <div class="term-ar">هندسة المتطلبات</div>
-          <div class="term-desc">تعريف وتوثيق وصيانة متطلبات النظام</div>
-          <div class="term-why">💡 الخطأ الشائع: إن الـ RE مرحلة واحدة بس – هو في الواقع 5 مراحل</div>
-        </div>
-        <div class="term-card" onclick="flipTerm(this)">
-          <div class="term-en">SRS</div>
-          <div class="term-ar">Software Requirements Specification</div>
-          <div class="term-desc">وثيقة المتطلبات الكاملة</div>
-          <div class="term-why">💡 مجموع كل الـ requirements المتفق عليها</div>
-        </div>
-        <div class="term-card" onclick="flipTerm(this)">
-          <div class="term-en">Stakeholder</div>
-          <div class="term-ar">أصحاب المصلحة</div>
-          <div class="term-desc">أي فرد أو مجموعة لها مصلحة في النظام</div>
-          <div class="term-why">💡 Client ≠ End User دايماً!</div>
-        </div>
-        <div class="term-card" onclick="flipTerm(this)">
-          <div class="term-en">Functional Requirement</div>
-          <div class="term-ar">متطلب وظيفي</div>
-          <div class="term-desc">ماذا يفعل النظام</div>
-          <div class="term-why">💡 مثال: "يسمح للمستخدم بتسجيل الدخول"</div>
-        </div>
-        <div class="term-card" onclick="flipTerm(this)">
-          <div class="term-en">Non-Functional Requirement</div>
-          <div class="term-ar">متطلب غير وظيفي</div>
-          <div class="term-desc">كيف يعمل النظام (جودة، أمان، سرعة...)</div>
-          <div class="term-why">💡 Platform req. مثل "يطبع على LC-9 plotter" هو NFR!</div>
-        </div>
-        <div class="term-card" onclick="flipTerm(this)">
-          <div class="term-en">Use Case</div>
-          <div class="term-ar">حالة الاستخدام</div>
-          <div class="term-desc">تسلسل من الخطوات لإنجاز مهمة معينة</div>
-          <div class="term-why">💡 الأهم: الاسم والخطوات (Name & Steps)</div>
-        </div>
-        <div class="term-card" onclick="flipTerm(this)">
-          <div class="term-en">Actor</div>
-          <div class="term-ar">الممثل</div>
-          <div class="term-desc">كيان يتفاعل مع النظام (مستخدم أو نظام آخر)</div>
-          <div class="term-why">💡 مش لازم يكون إنسان! ممكن يكون نظام خارجي</div>
-        </div>
-        <div class="term-card" onclick="flipTerm(this)">
-          <div class="term-en">User Story</div>
-          <div class="term-ar">قصة المستخدم</div>
-          <div class="term-desc">As a [user], I want [action], so that [benefit]</div>
-          <div class="term-why">💡 مشهورة في Agile/Scrum – Q10 في 2022: الجواب User Story</div>
-        </div>
-        <div class="term-card" onclick="flipTerm(this)">
-          <div class="term-en">Elicitation</div>
-          <div class="term-ar">استخلاص / جمع المتطلبات</div>
-          <div class="term-desc">أول مرحلة في الـ RE</div>
-          <div class="term-why">💡 الترتيب: Elicitation أول حاجة دايماً</div>
-        </div>
-        <div class="term-card" onclick="flipTerm(this)">
-          <div class="term-en">Feasibility Study</div>
-          <div class="term-ar">دراسة الجدوى</div>
-          <div class="term-desc">تقييم إمكانية تنفيذ المشروع (Technical, Economic, Legal, Schedule)</div>
-          <div class="term-why">💡 الـ 4 أنواع مطلوبة في الامتحانات</div>
-        </div>
-        <div class="term-card" onclick="flipTerm(this)">
-          <div class="term-en">EARS</div>
-          <div class="term-ar">Easy Approach to Requirements Syntax</div>
-          <div class="term-desc">طريقة منظمة: When...then...If...then...Else</div>
-          <div class="term-why">💡 دقيقة وبسيطة في نفس الوقت</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- ======================== RECAP ======================== -->
-    <div class="section" id="recap">
-      <div class="section-header">
-        <div class="section-icon icon-amber">⚡</div>
-        <div>
-          <div class="section-title">مراجعة سريعة – آخر لحظة</div>
-          <div class="section-num">Last-Minute Revision</div>
-        </div>
-      </div>
-
-      <div class="card card-warning">
-        <div class="card-label label-amber">🔥 الأكثر تكراراً في الامتحانات</div>
-        <ul>
-          <li>ترتيب مراحل الـ RE: <span class="highlight-en">Elicitation → Analysis → Specification → Validation → Management</span></li>
-          <li>الـ <strong>Domain Expert</strong> هو مصدر المعلومات عن المجال</li>
-          <li>الـ <strong>User Story</strong> هي طريقة Agile الشهيرة</li>
-          <li>"LC-9 plotter" = <strong>Platform requirement</strong></li>
-          <li>الـ <strong>Transition Requirements</strong> مؤقتة وبتنتهي مع اكتمال التنفيذ</li>
-          <li>المتطلب الغامض (Ambiguous) = له أكثر من تفسير</li>
-          <li>الـ <strong>Traceability</strong> = ربط المتطلب بمصدره وأهداف المشروع</li>
-        </ul>
-      </div>
-
-      <div class="recap-grid">
-        <div class="recap-item">
-          <div class="ri-icon">🔢</div>
-          <h5>مراحل RE</h5>
-          <p>5 مراحل بالترتيب – الأكثر تكراراً</p>
-        </div>
-        <div class="recap-item">
-          <div class="ri-icon">📝</div>
-          <h5>User Story</h5>
-          <p>As a [user], I want..., so that...</p>
-        </div>
-        <div class="recap-item">
-          <div class="ri-icon">🎭</div>
-          <h5>Use Case</h5>
-          <p>Actor + Goals + Steps (2 columns)</p>
-        </div>
-        <div class="recap-item">
-          <div class="ri-icon">✅</div>
-          <h5>خصائص المتطلب الكويس</h5>
-          <p>Complete, Unambiguous, Consistent, Verifiable, Traceable</p>
-        </div>
-        <div class="recap-item">
-          <div class="ri-icon">🔍</div>
-          <h5>Domain Analysis</h5>
-          <p>8 sections من A لـ H</p>
-        </div>
-        <div class="recap-item">
-          <div class="ri-icon">💼</div>
-          <h5>Feasibility Study</h5>
-          <p>Technical + Economic + Legal + Schedule</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- ======================== EXAM QUESTIONS ======================== -->
-    <div class="section" id="exam">
-      <div class="section-header">
-        <div class="section-icon icon-purple">🏆</div>
-        <div>
-          <div class="section-title">أسئلة الامتحانات السابقة</div>
-          <div class="section-num">Past Exam Questions – اضغط لترى الجواب</div>
-        </div>
-      </div>
-
-      <!-- 2022 Midterm -->
-      <div class="card" style="border-color:rgba(77,159,255,0.3); margin-bottom:0.5rem">
-        <div class="card-label label-blue">📅 Midterm 2022</div>
-      </div>
-
-      <div class="exam-q">
-        <div class="exam-source"><span>Q7</span><span>2022 Midterm</span><span>Requirements</span></div>
-        <p class="quiz-q-text">The person that is going to be the source of knowledge about the field I am writing an application for and will give me all the needed information is called:</p>
-        <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.5rem">
-          <span class="tag tag-en">a) Developer</span>
-          <span class="tag tag-en">b) Manager</span>
-          <span class="tag tag-amber">c) Domain Expert ✅</span>
-          <span class="tag tag-en">d) Software Engineer</span>
-        </div>
-        <button class="show-answer-btn" onclick="toggleAnswer(this)">📖 اعرض الشرح</button>
-        <div class="answer-reveal">
-          <div class="answer-correct-tag">✅ الجواب: Domain Expert</div>
-          <p style="color:var(--text2); font-size:0.88rem; margin-top:0.5rem">الـ Domain Expert هو الشخص اللي عنده معرفة عميقة في مجال العمل اللي بتبني فيه النظام. هو مصدر المعلومات في مرحلة الـ Domain Analysis.</p>
-        </div>
-      </div>
-
-      <div class="exam-q">
-        <div class="exam-source"><span>Q8</span><span>2022 Midterm</span><span>RE Process</span></div>
-        <p class="quiz-q-text">The correct order for doing requirements engineering is:</p>
-        <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.5rem">
-          <span class="tag tag-en">a) Validation, documentation, elicitation, negotiation</span>
-          <span class="tag tag-amber">d) Elicitation, negotiation, documentation, validation ✅</span>
-        </div>
-        <button class="show-answer-btn" onclick="toggleAnswer(this)">📖 اعرض الشرح</button>
-        <div class="answer-reveal">
-          <div class="answer-correct-tag">✅ الجواب: (d)</div>
-          <p style="color:var(--text2); font-size:0.88rem; margin-top:0.5rem">الترتيب الصح: Elicitation (جمع) ← Analysis/Negotiation (تحليل وتفاوض) ← Documentation/Specification (توثيق) ← Validation (تحقق) ← Management (إدارة مستمرة)</p>
-        </div>
-      </div>
-
-      <div class="exam-q">
-        <div class="exam-source"><span>Q9</span><span>2022 Midterm</span><span>Types of Requirements</span></div>
-        <p class="quiz-q-text">Classify the following requirements statement: "The system will be able to print to an LC-9 plotter."</p>
-        <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.5rem">
-          <span class="tag tag-en">a) Functional requirement</span>
-          <span class="tag tag-amber">b) Platform requirement ✅</span>
-          <span class="tag tag-en">c) Process requirement</span>
-          <span class="tag tag-en">d) Quality requirement</span>
-        </div>
-        <button class="show-answer-btn" onclick="toggleAnswer(this)">📖 اعرض الشرح</button>
-        <div class="answer-reveal">
-          <div class="answer-correct-tag">✅ الجواب: Platform requirement</div>
-          <p style="color:var(--text2); font-size:0.88rem; margin-top:0.5rem">الـ Platform requirement هو نوع من الـ Non-Functional Requirements بيحدد قيود على البيئة والتكنولوجيا. الطباعة على طابعة معينة هي قيد على المنصة مش وظيفة!</p>
-        </div>
-      </div>
-
-      <div class="exam-q">
-        <div class="exam-source"><span>Q10</span><span>2022 Midterm</span><span>User Stories</span></div>
-        <p class="quiz-q-text">A ............. is a way of representing a single functionality that is commonly used in agile software processes like Scrum (with short development cycles)</p>
-        <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.5rem">
-          <span class="tag tag-amber">a) User story ✅</span>
-          <span class="tag tag-en">b) SRS document</span>
-          <span class="tag tag-en">c) prototype</span>
-          <span class="tag tag-en">d) Use case</span>
-          <span class="tag tag-en">e) Domain Analysis</span>
-        </div>
-        <button class="show-answer-btn" onclick="toggleAnswer(this)">📖 اعرض الشرح</button>
-        <div class="answer-reveal">
-          <div class="answer-correct-tag">✅ الجواب: User story</div>
-          <p style="color:var(--text2); font-size:0.88rem; margin-top:0.5rem">الـ User Story هي الأكثر استخداماً في Agile/Scrum. بتمثل وظيفة واحدة من وجهة نظر المستخدم.</p>
-        </div>
-      </div>
-
-      <!-- 2025 Midterm -->
-      <div class="card" style="border-color:rgba(0,212,170,0.3); margin-bottom:0.5rem; margin-top:1.5rem">
-        <div class="card-label label-teal">📅 Midterm 2025</div>
-      </div>
-
-      <div class="exam-q">
-        <div class="exam-source"><span>Q3</span><span>2025 Midterm</span><span>User Stories</span></div>
-        <p class="quiz-q-text">Which of these user stories is vague and less testable?</p>
-        <div style="display:flex; flex-direction:column; gap:0.4rem; margin-top:0.5rem">
-          <div style="font-size:0.88rem; color:var(--text2)">(a) As a user, I want to search for products using keywords, so I can find products to buy.</div>
-          <div style="font-size:0.88rem; color:var(--text2)">(b) As an admin, I want to view logs, to audit user activity.</div>
-          <div style="font-size:0.88rem; color:var(--accent); font-weight:700">(c) As a user, I want the UI to be friendly and modern, so I can easily use the program. ✅ VAGUE</div>
-          <div style="font-size:0.88rem; color:var(--text2)">(d) As a member, I want to reset my password via email, so I can recover my account.</div>
-        </div>
-        <button class="show-answer-btn" onclick="toggleAnswer(this)">📖 اعرض الشرح</button>
-        <div class="answer-reveal">
-          <div class="answer-correct-tag">✅ الجواب: (c)</div>
-          <p style="color:var(--text2); font-size:0.88rem; margin-top:0.5rem">"friendly and modern" – مصطلحات مبهمة مش قابلة للقياس أو الاختبار. إزاي تعرف لو الـ UI بقت "friendly" كفاية؟ مفيش معيار واضح. ده بالضبط الـ Ambiguity اللي لازم تتجنبه في المتطلبات.</p>
-        </div>
-      </div>
-
-      <div class="exam-q">
-        <div class="exam-source"><span>Q4</span><span>2025 Midterm</span><span>Use Case Diagrams</span></div>
-        <p class="quiz-q-text">A POS system where the cashier can: take a new order (always includes adding items + accepting payment), cancel an order (may include refund), and issue a refund independently. Which diagram correctly models this?</p>
-        <button class="show-answer-btn" onclick="toggleAnswer(this)">📖 اعرض التحليل</button>
-        <div class="answer-reveal">
-          <div class="answer-correct-tag">✅ الجواب: (d)</div>
-          <p style="color:var(--text2); font-size:0.88rem; margin-top:0.5rem">
-            <strong style="color:var(--teal)">قاعدة «include» vs «extend»:</strong><br>
-            • <strong>include</strong> = الـ use case لازم يشمل التاني (إجباري). مثال: "Take New Order" لازم يشمل "Add Item" و "Accept Payment".<br>
-            • <strong>extend</strong> = الـ use case ممكن يشمل التاني (اختياري). مثال: "Cancel Order" ممكن يشمل "Refund".<br>
-            • الـ Cashier يقدر يعمل "Refund" مستقل (ارتباط مباشر).
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- ======================== QUIZ ======================== -->
-    <div class="section" id="quiz-main">
-      <div class="section-header">
-        <div class="section-icon icon-green">🎮</div>
-        <div>
-          <div class="section-title">تدريب تفاعلي</div>
-          <div class="section-num">Interactive Quiz – اختبر نفسك!</div>
-        </div>
-      </div>
-
-      <div class="quiz-section" id="quiz-container">
-        <div class="quiz-title">📝 اختار الإجابة الصح ثم اضغط "تحقق من إجاباتي"</div>
-
-        <!-- Q1 -->
-        <div class="quiz-q" data-correct="c">
-          <div class="quiz-q-text">1️⃣ الـ Requirements Engineering بيشمل كام مرحلة أساسية؟</div>
-          <div class="quiz-options">
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q1')" data-val="a">
-              <div class="quiz-option-label">A</div>3 مراحل
-            </div>
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q1')" data-val="b">
-              <div class="quiz-option-label">B</div>4 مراحل
-            </div>
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q1')" data-val="c">
-              <div class="quiz-option-label">C</div>5 مراحل
-            </div>
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q1')" data-val="d">
-              <div class="quiz-option-label">D</div>6 مراحل
-            </div>
-          </div>
-          <div class="quiz-feedback" id="fb-quiz-q1"></div>
-        </div>
-
-        <!-- Q2 -->
-        <div class="quiz-q" data-correct="b">
-          <div class="quiz-q-text">2️⃣ إيه اللي يميز الـ Non-Functional Requirements عن الـ Functional Requirements؟</div>
-          <div class="quiz-options">
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q2')" data-val="a">
-              <div class="quiz-option-label">A</div>بتحدد إيه اللي النظام بيعمله
-            </div>
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q2')" data-val="b">
-              <div class="quiz-option-label">B</div>بتحدد إزاي النظام بيشتغل (جودة، سرعة، أمان)
-            </div>
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q2')" data-val="c">
-              <div class="quiz-option-label">C</div>بتحدد مين هيستخدم النظام
-            </div>
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q2')" data-val="d">
-              <div class="quiz-option-label">D</div>بتحدد التكلفة
-            </div>
-          </div>
-          <div class="quiz-feedback" id="fb-quiz-q2"></div>
-        </div>
-
-        <!-- Q3 -->
-        <div class="quiz-q" data-correct="a">
-          <div class="quiz-q-text">3️⃣ الـ Transition Requirements هي:</div>
-          <div class="quiz-options">
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q3')" data-val="a">
-              <div class="quiz-option-label">A</div>متطلبات مؤقتة تنتهي لما النظام الجديد ينتهي
-            </div>
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q3')" data-val="b">
-              <div class="quiz-option-label">B</div>متطلبات دائمة في النظام
-            </div>
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q3')" data-val="c">
-              <div class="quiz-option-label">C</div>متطلبات تقنية فقط
-            </div>
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q3')" data-val="d">
-              <div class="quiz-option-label">D</div>متطلبات المستخدم النهائي
-            </div>
-          </div>
-          <div class="quiz-feedback" id="fb-quiz-q3"></div>
-        </div>
-
-        <!-- Q4 -->
-        <div class="quiz-q" data-correct="d">
-          <div class="quiz-q-text">4️⃣ إيه أول مرحلة في الـ Requirements Engineering؟</div>
-          <div class="quiz-options">
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q4')" data-val="a">
-              <div class="quiz-option-label">A</div>Validation
-            </div>
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q4')" data-val="b">
-              <div class="quiz-option-label">B</div>Documentation
-            </div>
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q4')" data-val="c">
-              <div class="quiz-option-label">C</div>Analysis
-            </div>
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q4')" data-val="d">
-              <div class="quiz-option-label">D</div>Elicitation
-            </div>
-          </div>
-          <div class="quiz-feedback" id="fb-quiz-q4"></div>
-        </div>
-
-        <!-- Q5 -->
-        <div class="quiz-q" data-correct="c">
-          <div class="quiz-q-text">5️⃣ المتطلب ده: "النظام يجب أن يكون سريعاً" – فيه مشكلة إيه؟</div>
-          <div class="quiz-options">
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q5')" data-val="a">
-              <div class="quiz-option-label">A</div>Incomplete (ناقص)
-            </div>
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q5')" data-val="b">
-              <div class="quiz-option-label">B</div>Inconsistent (متناقض)
-            </div>
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q5')" data-val="c">
-              <div class="quiz-option-label">C</div>Not Verifiable (مش قابل للتحقق/القياس)
-            </div>
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q5')" data-val="d">
-              <div class="quiz-option-label">D</div>Not Traceable (مش قابل للتتبع)
-            </div>
-          </div>
-          <div class="quiz-feedback" id="fb-quiz-q5"></div>
-        </div>
-
-        <!-- Q6 -->
-        <div class="quiz-q" data-correct="b">
-          <div class="quiz-q-text">6️⃣ الـ Brainstorming في مرحلة جمع المتطلبات بيتميز بـ:</div>
-          <div class="quiz-options">
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q6')" data-val="a">
-              <div class="quiz-option-label">A</div>جلسة فردية مع كل stakeholder
-            </div>
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q6')" data-val="b">
-              <div class="quiz-option-label">B</div>جلسة جماعية بمشرف وبتجيب أفكار جماعية
-            </div>
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q6')" data-val="c">
-              <div class="quiz-option-label">C</div>تصميم نموذج أولي للنظام
-            </div>
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q6')" data-val="d">
-              <div class="quiz-option-label">D</div>ملاحظة المستخدمين في بيئة العمل
-            </div>
-          </div>
-          <div class="quiz-feedback" id="fb-quiz-q6"></div>
-        </div>
-
-        <!-- Q7 -->
-        <div class="quiz-q" data-correct="a">
-          <div class="quiz-q-text">7️⃣ في Use Case Diagram، الـ «include» يعني:</div>
-          <div class="quiz-options">
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q7')" data-val="a">
-              <div class="quiz-option-label">A</div>الـ use case لازم يشمل التاني (إجباري)
-            </div>
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q7')" data-val="b">
-              <div class="quiz-option-label">B</div>الـ use case ممكن يشمل التاني (اختياري)
-            </div>
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q7')" data-val="c">
-              <div class="quiz-option-label">C</div>الـ use case بيتوارث من التاني
-            </div>
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q7')" data-val="d">
-              <div class="quiz-option-label">D</div>الـ use case بيلغي التاني
-            </div>
-          </div>
-          <div class="quiz-feedback" id="fb-quiz-q7"></div>
-        </div>
-
-        <!-- Q8 -->
-        <div class="quiz-q" data-correct="d">
-          <div class="quiz-q-text">8️⃣ الـ Domain Analysis Document بيشمل كام section؟</div>
-          <div class="quiz-options">
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q8')" data-val="a">
-              <div class="quiz-option-label">A</div>5 sections
-            </div>
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q8')" data-val="b">
-              <div class="quiz-option-label">B</div>6 sections
-            </div>
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q8')" data-val="c">
-              <div class="quiz-option-label">C</div>7 sections
-            </div>
-            <div class="quiz-option" onclick="selectOption(this, 'quiz-q8')" data-val="d">
-              <div class="quiz-option-label">D</div>8 sections (A إلى H)
-            </div>
-          </div>
-          <div class="quiz-feedback" id="fb-quiz-q8"></div>
-        </div>
-
-        <button class="quiz-btn" onclick="checkAllQuestions()">✅ تحقق من إجاباتي</button>
-
-        <div class="quiz-score-display" id="quiz-score">
-          <div class="score-num" id="score-text">0/8</div>
-          <div style="color:var(--text2); margin-top:0.5rem" id="score-msg">حاول تاني!</div>
-        </div>
-      </div>
-    </div>
-
-    <div style="height:3rem"></div>
-
-  </main>
-</div>
-
-<!-- Mobile Nav -->
-<nav class="mobile-nav">
-  <a href="#hero"><span class="m-icon">🏠</span>الرئيسية</a>
-  <a href="#s2"><span class="m-icon">📋</span>RE</a>
-  <a href="#s3"><span class="m-icon">🎯</span>أنواع</a>
-  <a href="#s4"><span class="m-icon">📝</span>مراحل</a>
-  <a href="#s5"><span class="m-icon">📄</span>توثيق</a>
-  <a href="#s6"><span class="m-icon">🎭</span>Use Cases</a>
-  <a href="#terms"><span class="m-icon">📚</span>مصطلحات</a>
-  <a href="#exam"><span class="m-icon">🏆</span>امتحانات</a>
-  <a href="#quiz-main"><span class="m-icon">🎮</span>تدريب</a>
-</nav>
-
-<script>
-// ===== PROGRESS BAR =====
-window.addEventListener('scroll', () => {
-  const scrollTop = document.documentElement.scrollTop;
-  const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-  const progress = (scrollTop / scrollHeight) * 100;
-  document.getElementById('progress-bar').style.width = progress + '%';
-});
-
-// ===== TOGGLE EXPLAIN =====
-function toggleExplain(toggle) {
-  const block = toggle.parentElement;
-  block.classList.toggle('open');
-}
-
-// ===== FLIP TERM =====
-function flipTerm(card) {
-  card.classList.toggle('flipped');
-}
-
-// ===== QUIZ =====
-const quizSelections = {};
-
-function selectOption(el, qid) {
-  const parent = el.parentElement;
-  parent.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
-  el.classList.add('selected');
-  quizSelections[qid] = el.dataset.val;
-}
-
-function checkAllQuestions() {
-  const questions = document.querySelectorAll('.quiz-q[data-correct]');
-  let score = 0;
-  let total = questions.length;
-  let answered = 0;
-
-  const qids = ['quiz-q1','quiz-q2','quiz-q3','quiz-q4','quiz-q5','quiz-q6','quiz-q7','quiz-q8'];
-  const feedbacks = {
-    'quiz-q1': {correct: '✅ صح! الـ RE عنده 5 مراحل أساسية.', wrong: '❌ غلط. الإجابة 5 مراحل: Elicitation, Analysis, Specification, Validation, Management'},
-    'quiz-q2': {correct: '✅ ممتاز! NFR بتحدد الكيفية مش الماذا.', wrong: '❌ غلط. NFR بتحدد إزاي النظام بيشتغل (جودة، سرعة، أمان، scalability...).'},
-    'quiz-q3': {correct: '✅ صح! Transition requirements مؤقتة.', wrong: '❌ غلط. الـ Transition Requirements مؤقتة وبتنتهي لما التحول للنظام الجديد يكتمل.'},
-    'quiz-q4': {correct: '✅ ممتاز! Elicitation هي أول خطوة دايماً.', wrong: '❌ غلط. الأول دايماً Elicitation (جمع المتطلبات).'},
-    'quiz-q5': {correct: '✅ صح! "سريع" كلمة مبهمة مش قابلة للقياس.', wrong: '❌ غلط. المشكلة إن "سريع" مش قابل للقياس. المتطلب الكويس لازم يكون Verifiable مثلاً: "1000 transaction/sec".'},
-    'quiz-q6': {correct: '✅ صح! Brainstorming جلسة جماعية بمشرف.', wrong: '❌ غلط. Brainstorming جلسة جماعية بمشرف (moderator) وبتجيب أفكار جماعية.'},
-    'quiz-q7': {correct: '✅ ممتاز! Include = إجباري.', wrong: '❌ غلط. Include = الـ use case لازم يشمل التاني (إجباري). أما Extend = اختياري.'},
-    'quiz-q8': {correct: '✅ صح! 8 sections من A إلى H.', wrong: '❌ غلط. وثيقة الـ Domain Analysis بتشمل 8 sections: A. Introduction, B. Glossary, C. General Knowledge, D. Customers & Users, E. Environment, F. Tasks & Procedures, G. Competing Software, H. Similarities to other domains.'},
-  };
-
-  qids.forEach((qid, i) => {
-    const q = questions[i];
-    const correct = q.dataset.correct;
-    const selected = quizSelections[qid];
-    const fb = document.getElementById('fb-' + qid);
-
-    const options = q.querySelectorAll('.quiz-option');
-    options.forEach(o => {
-      o.classList.remove('correct', 'wrong');
-      if(o.dataset.val === correct) o.classList.add('correct');
-      if(selected && o.dataset.val === selected && selected !== correct) o.classList.add('wrong');
-    });
-
-    if(selected) {
-      answered++;
-      fb.style.display = 'block';
-      if(selected === correct) {
-        score++;
-        fb.className = 'quiz-feedback feedback-correct';
-        fb.innerHTML = feedbacks[qid].correct;
-      } else {
-        fb.className = 'quiz-feedback feedback-wrong';
-        fb.innerHTML = feedbacks[qid].wrong;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CS251 – Requirements Engineering | مذاكرة تفاعلية</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0d1117;
+        --bg2: #161b22;
+        --bg3: #1c2333;
+        --surface: #1e2736;
+        --surface2: #243044;
+        --border: #30363d;
+        --text: #e6edf3;
+        --text2: #8b949e;
+        --text3: #c9d1d9;
+        --accent: #58a6ff;
+        --accent2: #f0883e;
+        --teal: #39d0d8;
+        --teal2: #3fb950;
+        --blue: #58a6ff;
+        --red: #ff7b72;
+        --green: #3fb950;
+        --purple: #bc8cff;
+        --pink: #f778ba;
+        --font-ar: "Cairo", "Tajawal", sans-serif;
+        --font-en: "JetBrains Mono", monospace;
+        --radius: 16px;
+        --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
       }
-    } else {
-      fb.style.display = 'block';
-      fb.className = 'quiz-feedback feedback-wrong';
-      fb.innerHTML = '⚠️ لم تختر إجابة لهذا السؤال. الجواب الصح: ' + feedbacks[qid].correct.replace('✅ ', '');
-    }
-  });
 
-  const scoreEl = document.getElementById('quiz-score');
-  scoreEl.style.display = 'block';
-  document.getElementById('score-text').textContent = score + '/' + total;
-  
-  const pct = Math.round((score/total)*100);
-  let msg = '';
-  if(pct === 100) msg = '🏆 ممتاز! انت جاهز للامتحان!';
-  else if(pct >= 75) msg = '💪 كويس جداً! راجع الأسئلة الغلط.';
-  else if(pct >= 50) msg = '📚 محتاج مراجعة أكثر، ركز في المواضيع اللي غلطت فيها.';
-  else msg = '🔄 راجع المحتوى تاني وحاول مجدداً!';
-  document.getElementById('score-msg').textContent = msg;
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-  scoreEl.scrollIntoView({behavior: 'smooth', block: 'center'});
-}
+      html {
+        scroll-behavior: smooth;
+      }
 
-// ===== SHOW ANSWER =====
-function toggleAnswer(btn) {
-  const reveal = btn.nextElementSibling;
-  if(reveal.style.display === 'block') {
-    reveal.style.display = 'none';
-    btn.textContent = '📖 اعرض الشرح';
-  } else {
-    reveal.style.display = 'block';
-    btn.textContent = '🔼 إخفاء';
-  }
-}
+      body {
+        font-family: var(--font-ar);
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.7;
+        font-size: 16px;
+      }
 
-// ===== SEARCH =====
-function searchContent(query) {
-  const main = document.getElementById('content');
-  
-  // Remove previous highlights
-  main.querySelectorAll('.search-highlight').forEach(el => {
-    el.outerHTML = el.innerHTML;
-  });
-  
-  if(!query || query.length < 2) return;
-  
-  const walker = document.createTreeWalker(main, NodeFilter.SHOW_TEXT);
-  const nodes = [];
-  while(walker.nextNode()) {
-    nodes.push(walker.currentNode);
-  }
-  
-  nodes.forEach(node => {
-    const text = node.textContent;
-    const regex = new RegExp(query, 'gi');
-    if(regex.test(text)) {
-      const span = document.createElement('span');
-      span.innerHTML = text.replace(regex, match => `<mark class="search-highlight">${match}</mark>`);
-      node.parentNode.replaceChild(span, node);
-    }
-  });
-}
+      /* ===== SCROLLBAR ===== */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--bg2);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: 3px;
+      }
 
-// ===== ACTIVE NAV =====
-const sections = document.querySelectorAll('.section, .hero');
-const navLinks = document.querySelectorAll('.sidebar nav a, .mobile-nav a');
+      /* ===== PROGRESS BAR ===== */
+      #progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--accent), var(--teal));
+        z-index: 9999;
+        transition: width 0.1s;
+        width: 0%;
+      }
 
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if(entry.isIntersecting) {
-      const id = entry.target.id;
-      navLinks.forEach(link => {
-        link.classList.remove('active');
-        if(link.getAttribute('href') === '#' + id) {
-          link.classList.add('active');
+      /* ===== HEADER ===== */
+      header {
+        background: linear-gradient(
+          135deg,
+          #0a0e16 0%,
+          #0d1f35 50%,
+          #0a1625 100%
+        );
+        border-bottom: 1px solid var(--border);
+        padding: 0 2rem;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        backdrop-filter: blur(12px);
+      }
+
+      .header-inner {
+        max-width: 1300px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 60px;
+        gap: 1rem;
+      }
+
+      .logo {
+        font-family: var(--font-en);
+        font-size: 1rem;
+        color: var(--accent);
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .logo span {
+        color: var(--teal);
+      }
+
+      .search-box {
+        display: flex;
+        align-items: center;
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 0.4rem 1rem;
+        gap: 0.5rem;
+        flex: 1;
+        max-width: 350px;
+      }
+
+      .search-box input {
+        background: none;
+        border: none;
+        outline: none;
+        color: var(--text);
+        font-family: var(--font-ar);
+        font-size: 0.9rem;
+        width: 100%;
+        direction: rtl;
+      }
+
+      .search-box input::placeholder {
+        color: var(--text3);
+      }
+
+      .page-switch {
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 0.7rem 2rem;
+        display: flex;
+        gap: 0.55rem;
+        flex-wrap: wrap;
+        border-bottom: 1px solid var(--border);
+        background: var(--bg2);
+      }
+
+      .page-switch a {
+        text-decoration: none;
+        font-size: 0.78rem;
+        color: var(--text2);
+        border: 1px solid var(--border);
+        background: var(--bg3);
+        border-radius: 999px;
+        padding: 0.28rem 0.85rem;
+        transition: all 0.2s;
+      }
+
+      .page-switch a:hover,
+      .page-switch a.current {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: rgba(88, 166, 255, 0.1);
+      }
+
+      /* ===== LAYOUT ===== */
+      .layout {
+        max-width: 1300px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 260px 1fr;
+        gap: 0;
+        min-height: 100vh;
+      }
+
+      /* ===== SIDEBAR ===== */
+      .sidebar {
+        position: sticky;
+        top: 60px;
+        height: calc(100vh - 60px);
+        overflow-y: auto;
+        border-left: 1px solid var(--border);
+        padding: 1.5rem 1rem;
+        background: var(--bg2);
+      }
+
+      .sidebar h3 {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: var(--text3);
+        margin-bottom: 1rem;
+        padding-right: 0.5rem;
+      }
+
+      .sidebar nav a {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.55rem 0.8rem;
+        border-radius: 8px;
+        text-decoration: none;
+        color: var(--text2);
+        font-size: 0.85rem;
+        margin-bottom: 2px;
+        transition: all 0.2s;
+        border: 1px solid transparent;
+      }
+
+      .sidebar nav a:hover,
+      .sidebar nav a.active {
+        background: var(--surface);
+        color: var(--accent);
+        border-color: var(--border);
+      }
+
+      .sidebar nav a .icon {
+        font-size: 1rem;
+      }
+      .sidebar nav a .num {
+        margin-right: auto;
+        font-family: var(--font-en);
+        font-size: 0.7rem;
+        background: var(--bg3);
+        padding: 1px 6px;
+        border-radius: 10px;
+        color: var(--text3);
+      }
+
+      /* ===== MAIN ===== */
+      main {
+        padding: 2.5rem 3rem;
+        max-width: 900px;
+      }
+
+      /* ===== HERO ===== */
+      .hero {
+        background: linear-gradient(135deg, #0d1f35 0%, #0a1a2e 100%);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 3rem;
+        margin-bottom: 3rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: -50px;
+        left: -50px;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(
+          circle,
+          rgba(0, 212, 170, 0.07) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        bottom: -80px;
+        right: -80px;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(
+          circle,
+          rgba(240, 165, 0, 0.06) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+
+      .hero-badge {
+        display: inline-block;
+        background: rgba(0, 212, 170, 0.1);
+        border: 1px solid rgba(0, 212, 170, 0.3);
+        color: var(--teal);
+        padding: 0.3rem 1rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        margin-bottom: 1.5rem;
+        font-family: var(--font-en);
+      }
+
+      .hero h1 {
+        font-family: "Cairo", "Tajawal", sans-serif;
+        font-size: 2.2rem;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #fff 0%, #8aa3bf 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .hero p {
+        color: var(--text2);
+        font-size: 1.05rem;
+        max-width: 600px;
+        margin-bottom: 2rem;
+      }
+
+      .hero-stats {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .stat {
+        text-align: center;
+      }
+
+      .stat-num {
+        font-family: var(--font-en);
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--accent);
+      }
+
+      .stat-label {
+        font-size: 0.8rem;
+        color: var(--text3);
+      }
+
+      /* ===== SECTIONS ===== */
+      .section {
+        margin-bottom: 4rem;
+      }
+
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .section-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        flex-shrink: 0;
+      }
+
+      .icon-blue {
+        background: rgba(77, 159, 255, 0.15);
+        border: 1px solid rgba(77, 159, 255, 0.3);
+      }
+      .icon-teal {
+        background: rgba(0, 212, 170, 0.12);
+        border: 1px solid rgba(0, 212, 170, 0.3);
+      }
+      .icon-amber {
+        background: rgba(240, 165, 0, 0.12);
+        border: 1px solid rgba(240, 165, 0, 0.3);
+      }
+      .icon-purple {
+        background: rgba(167, 139, 250, 0.12);
+        border: 1px solid rgba(167, 139, 250, 0.3);
+      }
+      .icon-pink {
+        background: rgba(244, 114, 182, 0.12);
+        border: 1px solid rgba(244, 114, 182, 0.3);
+      }
+      .icon-green {
+        background: rgba(77, 204, 136, 0.12);
+        border: 1px solid rgba(77, 204, 136, 0.3);
+      }
+
+      .section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      .section-num {
+        font-family: var(--font-en);
+        font-size: 0.75rem;
+        color: var(--accent);
+        background: rgba(240, 165, 0, 0.1);
+        padding: 2px 8px;
+        border-radius: 8px;
+        margin-top: 4px;
+        display: inline-block;
+      }
+
+      /* ===== CARDS ===== */
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        margin-bottom: 1.2rem;
+      }
+
+      .card-summary {
+        background: linear-gradient(135deg, #1a2840 0%, #152234 100%);
+        border-color: rgba(77, 159, 255, 0.3);
+        border-right: 3px solid var(--blue);
+      }
+
+      .card-definition {
+        background: linear-gradient(135deg, #1a2a20 0%, #142018 100%);
+        border-color: rgba(77, 204, 136, 0.3);
+        border-right: 3px solid var(--green);
+      }
+
+      .card-warning {
+        background: linear-gradient(135deg, #2a2010 0%, #201808 100%);
+        border-color: rgba(240, 165, 0, 0.3);
+        border-right: 3px solid var(--accent);
+      }
+
+      .card-exam {
+        background: linear-gradient(135deg, #2a1a20 0%, #201018 100%);
+        border-color: rgba(255, 91, 91, 0.3);
+        border-right: 3px solid var(--red);
+      }
+
+      .card-tip {
+        background: linear-gradient(135deg, #1a2030 0%, #141828 100%);
+        border-color: rgba(167, 139, 250, 0.3);
+        border-right: 3px solid var(--purple);
+      }
+
+      .card-label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        font-weight: 700;
+        margin-bottom: 0.8rem;
+      }
+
+      .label-blue {
+        color: var(--blue);
+      }
+      .label-green {
+        color: var(--green);
+      }
+      .label-amber {
+        color: var(--accent);
+      }
+      .label-red {
+        color: var(--red);
+      }
+      .label-purple {
+        color: var(--purple);
+      }
+      .label-teal {
+        color: var(--teal);
+      }
+
+      .card h4 {
+        font-size: 1rem;
+        color: var(--text);
+        margin-bottom: 0.6rem;
+      }
+
+      .card p,
+      .card li {
+        color: var(--text2);
+        font-size: 0.95rem;
+        line-height: 1.7;
+      }
+
+      .card ul {
+        padding-right: 1.5rem;
+      }
+      .card li {
+        margin-bottom: 0.4rem;
+      }
+
+      /* ===== EXPLANATION BLOCKS ===== */
+      .explain-block {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        margin-bottom: 1.2rem;
+        overflow: hidden;
+      }
+
+      .explain-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.5rem;
+        cursor: pointer;
+        user-select: none;
+        transition: background 0.2s;
+      }
+
+      .explain-toggle:hover {
+        background: var(--surface2);
+      }
+
+      .explain-toggle-title {
+        font-weight: 600;
+        font-size: 1rem;
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+      }
+
+      .explain-arrow {
+        color: var(--text3);
+        transition: transform 0.3s;
+        font-size: 0.8rem;
+      }
+
+      .explain-block.open .explain-arrow {
+        transform: rotate(180deg);
+      }
+
+      .explain-content {
+        display: none;
+        padding: 0 1.5rem 1.5rem;
+        color: var(--text2);
+        font-size: 0.95rem;
+        line-height: 1.8;
+        border-top: 1px solid var(--border);
+      }
+
+      .explain-block.open .explain-content {
+        display: block;
+      }
+
+      .explain-content p {
+        margin-bottom: 0.8rem;
+      }
+      .explain-content ul {
+        padding-right: 1.5rem;
+        margin-bottom: 0.8rem;
+      }
+      .explain-content li {
+        margin-bottom: 0.4rem;
+      }
+
+      /* ===== TAGS ===== */
+      .tag {
+        display: inline-block;
+        padding: 0.2rem 0.7rem;
+        border-radius: 6px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        margin: 0.15rem;
+      }
+
+      .tag-en {
+        background: rgba(77, 159, 255, 0.15);
+        color: var(--blue);
+        border: 1px solid rgba(77, 159, 255, 0.3);
+        font-family: var(--font-en);
+        font-size: 0.75rem;
+      }
+
+      .tag-amber {
+        background: rgba(240, 165, 0, 0.12);
+        color: var(--accent);
+        border: 1px solid rgba(240, 165, 0, 0.3);
+      }
+
+      /* ===== TERMS GRID ===== */
+      .terms-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 0.8rem;
+        margin: 1rem 0;
+      }
+
+      .term-card {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1rem 1.2rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        position: relative;
+      }
+
+      .term-card:hover {
+        border-color: var(--accent);
+        background: var(--surface);
+      }
+
+      .term-en {
+        font-family: var(--font-en);
+        font-size: 0.85rem;
+        color: var(--teal);
+        font-weight: 700;
+        margin-bottom: 0.4rem;
+      }
+
+      .term-ar {
+        font-size: 0.9rem;
+        color: var(--text);
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+      }
+
+      .term-desc {
+        font-size: 0.82rem;
+        color: var(--text3);
+        line-height: 1.5;
+      }
+
+      .term-why {
+        display: none;
+        margin-top: 0.6rem;
+        padding-top: 0.6rem;
+        border-top: 1px dashed var(--border);
+        font-size: 0.8rem;
+        color: var(--accent);
+      }
+
+      .term-card.flipped .term-why {
+        display: block;
+      }
+
+      /* ===== TABLE ===== */
+      .compare-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+        font-size: 0.9rem;
+      }
+
+      .compare-table th {
+        background: var(--surface2);
+        padding: 0.8rem 1rem;
+        text-align: right;
+        color: var(--accent);
+        font-size: 0.85rem;
+        border-bottom: 2px solid var(--border);
+        font-weight: 700;
+      }
+
+      .compare-table td {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--border);
+        color: var(--text2);
+        vertical-align: top;
+      }
+
+      .compare-table tr:hover td {
+        background: var(--bg3);
+      }
+
+      .compare-table .en-cell {
+        font-family: var(--font-en);
+        font-size: 0.82rem;
+        color: var(--teal);
+        font-weight: 700;
+      }
+
+      /* ===== QUIZ ===== */
+      .quiz-section {
+        background: linear-gradient(135deg, var(--bg3) 0%, var(--surface) 100%);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.75rem;
+        margin-top: 1.75rem;
+      }
+
+      .quiz-title {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        font-size: 1.05rem;
+        font-weight: 800;
+        margin-bottom: 1.3rem;
+        color: var(--accent2);
+      }
+
+      .quiz-q {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1.1rem 1.15rem;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid var(--border);
+        transition:
+          border-color 0.2s,
+          transform 0.2s;
+      }
+
+      .quiz-q:hover {
+        border-color: var(--accent);
+        transform: translateY(-1px);
+      }
+
+      .quiz-q:last-child {
+        margin-bottom: 0;
+      }
+
+      .quiz-q-text {
+        font-size: 0.96rem;
+        color: var(--text);
+        margin-bottom: 0.85rem;
+        line-height: 1.6;
+        font-weight: 600;
+      }
+
+      .quiz-options {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .quiz-option {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.8rem;
+        padding: 0.72rem 0.9rem;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+        color: var(--text3);
+        font-size: 0.9rem;
+        background: var(--surface);
+        width: 100%;
+      }
+
+      .quiz-option:hover {
+        border-color: var(--accent);
+        color: var(--text);
+        background: rgba(88, 166, 255, 0.08);
+      }
+
+      .quiz-option input {
+        display: none;
+      }
+
+      .quiz-option-label {
+        width: 22px;
+        height: 22px;
+        border: 2px solid var(--border);
+        border-radius: 50%;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-en);
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--text3);
+        margin-top: 1px;
+      }
+
+      .quiz-option.selected {
+        border-color: var(--blue);
+        background: rgba(88, 166, 255, 0.14);
+      }
+
+      .quiz-option.selected .quiz-option-label {
+        background: var(--blue);
+        border-color: var(--blue);
+        color: white;
+      }
+
+      .quiz-option.correct {
+        border-color: var(--green);
+        background: rgba(63, 185, 80, 0.15);
+        color: var(--green);
+      }
+
+      .quiz-option.correct .quiz-option-label {
+        background: var(--green);
+        border-color: var(--green);
+        color: white;
+      }
+
+      .quiz-option.wrong {
+        border-color: var(--red);
+        background: rgba(255, 123, 114, 0.14);
+        color: var(--red);
+      }
+
+      .quiz-btn {
+        background: linear-gradient(135deg, var(--accent), #7ec0ff);
+        border: none;
+        color: #000;
+        padding: 0.72rem 1.9rem;
+        border-radius: 8px;
+        font-family: var(--font-ar);
+        font-size: 0.9rem;
+        font-weight: 700;
+        cursor: pointer;
+        margin-top: 1rem;
+        transition: all 0.2s;
+      }
+
+      .quiz-btn:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+      }
+
+      .quiz-feedback {
+        display: none;
+        margin-top: 0.8rem;
+        padding: 0.82rem 0.95rem;
+        border-radius: 8px;
+        font-size: 0.87rem;
+      }
+
+      .feedback-correct {
+        background: rgba(63, 185, 80, 0.1);
+        border: 1px solid rgba(63, 185, 80, 0.28);
+        color: var(--green);
+      }
+
+      .feedback-wrong {
+        background: rgba(255, 123, 114, 0.1);
+        border: 1px solid rgba(255, 123, 114, 0.28);
+        color: var(--red);
+      }
+
+      .quiz-score-display {
+        display: none;
+        text-align: center;
+        padding: 1.5rem;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        margin-top: 1rem;
+      }
+
+      .score-num {
+        font-family: var(--font-en);
+        font-size: 3rem;
+        font-weight: 700;
+        color: var(--accent);
+      }
+
+      /* ===== EXAM PRACTICE ===== */
+      .exam-q {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1.1rem 1.15rem;
+        margin-bottom: 1rem;
+        transition:
+          border-color 0.2s,
+          transform 0.2s;
+      }
+
+      .exam-q:hover {
+        border-color: var(--accent);
+        transform: translateY(-1px);
+      }
+
+      .exam-source {
+        font-size: 0.75rem;
+        font-family: var(--font-en);
+        color: var(--text3);
+        margin-bottom: 0.8rem;
+      }
+
+      .exam-source span {
+        background: var(--bg3);
+        padding: 2px 8px;
+        border-radius: 4px;
+        margin-right: 0.4rem;
+      }
+
+      .show-answer-btn {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--text3);
+        padding: 0.52rem 1.1rem;
+        border-radius: 8px;
+        font-family: var(--font-ar);
+        font-size: 0.85rem;
+        cursor: pointer;
+        margin-top: 0.8rem;
+        transition: all 0.2s;
+      }
+
+      .show-answer-btn:hover {
+        border-color: var(--accent);
+        color: var(--text);
+        background: rgba(88, 166, 255, 0.08);
+      }
+
+      .answer-reveal {
+        display: none;
+        margin-top: 1rem;
+        padding: 1rem;
+        background: var(--bg3);
+        border-radius: 8px;
+        border: 1px solid var(--border);
+      }
+
+      .answer-correct-tag {
+        display: inline-block;
+        background: rgba(77, 204, 136, 0.15);
+        color: var(--green);
+        border: 1px solid rgba(77, 204, 136, 0.3);
+        padding: 2px 10px;
+        border-radius: 10px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+
+      /* ===== STEPS ===== */
+      .steps-list {
+        list-style: none;
+        counter-reset: step;
+      }
+
+      .step-item {
+        counter-increment: step;
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        padding: 1rem 1.2rem;
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+      }
+
+      .step-item::before {
+        content: counter(step);
+        width: 28px;
+        height: 28px;
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-en);
+        font-weight: 700;
+        font-size: 0.8rem;
+        color: #000;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+
+      .step-content h5 {
+        font-size: 0.95rem;
+        color: var(--text);
+        margin-bottom: 0.3rem;
+      }
+
+      .step-content p {
+        font-size: 0.88rem;
+        color: var(--text2);
+      }
+
+      /* ===== HIGHLIGHT ===== */
+      .highlight-en {
+        font-family: var(--font-en);
+        background: rgba(0, 212, 170, 0.1);
+        border: 1px solid rgba(0, 212, 170, 0.25);
+        color: var(--teal);
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-size: 0.87em;
+        font-weight: 700;
+      }
+
+      .highlight-amber {
+        background: rgba(240, 165, 0, 0.12);
+        color: var(--accent);
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-weight: 600;
+      }
+
+      /* ===== DIVIDER ===== */
+      .divider {
+        height: 1px;
+        background: var(--border);
+        margin: 2.5rem 0;
+      }
+
+      /* ===== RECAP ===== */
+      .recap-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 0.8rem;
+        margin: 1rem 0;
+      }
+
+      .recap-item {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1rem;
+        transition: all 0.2s;
+      }
+
+      .recap-item:hover {
+        border-color: var(--teal);
+        transform: translateY(-2px);
+      }
+
+      .recap-item .ri-icon {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+      .recap-item h5 {
+        font-size: 0.9rem;
+        color: var(--text);
+        margin-bottom: 0.3rem;
+      }
+      .recap-item p {
+        font-size: 0.82rem;
+        color: var(--text2);
+      }
+
+      /* ===== RESPONSIVE ===== */
+      @media (max-width: 900px) {
+        .layout {
+          grid-template-columns: 1fr;
         }
-      });
-    }
-  });
-}, {threshold: 0.3});
+        .sidebar {
+          display: none;
+        }
+        main {
+          padding: 1.5rem;
+        }
+      }
 
-sections.forEach(s => observer.observe(s));
-document.querySelector('.hero') && observer.observe(document.querySelector('.hero'));
-</script>
-</body>
+      /* ===== ANIMATIONS ===== */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .section {
+        animation: fadeIn 0.4s ease both;
+      }
+
+      /* ===== SEARCH HIGHLIGHT ===== */
+      .search-highlight {
+        background: rgba(240, 165, 0, 0.3);
+        border-radius: 3px;
+        padding: 0 2px;
+      }
+
+      /* ===== MOBILE NAV ===== */
+      .mobile-nav {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: var(--bg2);
+        border-top: 1px solid var(--border);
+        z-index: 100;
+        padding: 0.5rem;
+        gap: 0.3rem;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+
+      @media (max-width: 900px) {
+        .mobile-nav {
+          display: flex;
+        }
+        main {
+          padding-bottom: 60px;
+        }
+      }
+
+      .mobile-nav a {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        padding: 0.4rem 0.8rem;
+        border-radius: 8px;
+        text-decoration: none;
+        color: var(--text3);
+        font-size: 0.65rem;
+        transition: all 0.2s;
+      }
+
+      .mobile-nav a:hover,
+      .mobile-nav a.active {
+        background: var(--surface);
+        color: var(--accent);
+      }
+
+      .mobile-nav a .m-icon {
+        font-size: 1.1rem;
+      }
+
+      /* ===== REQUIREMENTS TYPE VISUAL ===== */
+      .req-types {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+
+      .req-type-card {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1.2rem;
+      }
+
+      .req-type-card h5 {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.92rem;
+        color: var(--text);
+        margin-bottom: 0.6rem;
+      }
+
+      .req-type-card ul {
+        padding-right: 1.2rem;
+      }
+
+      .req-type-card li {
+        font-size: 0.85rem;
+        color: var(--text2);
+        margin-bottom: 0.3rem;
+      }
+
+      @media (max-width: 600px) {
+        .req-types {
+          grid-template-columns: 1fr;
+        }
+        .terms-grid {
+          grid-template-columns: 1fr;
+        }
+        .hero h1 {
+          font-size: 1.6rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="progress-bar"></div>
+
+    <!-- HEADER -->
+    <header>
+      <div class="header-inner">
+        <div class="logo">CS251 <span>// RE</span></div>
+        <div class="search-box">
+          <span>🔍</span>
+          <input
+            type="text"
+            id="search-input"
+            placeholder="ابحث في المحتوى..."
+            oninput="searchContent(this.value)"
+          />
+        </div>
+        <div class="logo" style="font-size: 0.75rem; color: var(--text3)">
+          Dr. M. El-Ramly
+        </div>
+      </div>
+    </header>
+
+    <div class="page-switch">
+      <a href="revision.html">UI &amp; State Revision</a>
+      <a href="2-3-4.html" class="current">Requirements Engineering</a>
+      <a href="5-6.html">UML Class &amp; Sequence</a>
+    </div>
+
+    <div class="layout">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <h3>المحتوى</h3>
+        <nav>
+          <a href="#hero" class="active"
+            ><span class="icon">🏠</span> نظرة عامة<span class="num">0</span></a
+          >
+          <a href="#s0"
+            ><span class="icon">🚀</span> ما قبل المشروع<span class="num"
+              >1</span
+            ></a
+          >
+          <a href="#s1"
+            ><span class="icon">🔍</span> Domain Analysis<span class="num"
+              >2</span
+            ></a
+          >
+          <a href="#s2"
+            ><span class="icon">📋</span> Requirements Engineering<span
+              class="num"
+              >3</span
+            ></a
+          >
+          <a href="#s3"
+            ><span class="icon">🎯</span> أنواع المتطلبات<span class="num"
+              >4</span
+            ></a
+          >
+          <a href="#s4"
+            ><span class="icon">📝</span> مراحل الـ RE<span class="num"
+              >5</span
+            ></a
+          >
+          <a href="#s5"
+            ><span class="icon">📄</span> طرق التوثيق<span class="num"
+              >6</span
+            ></a
+          >
+          <a href="#s6"
+            ><span class="icon">🎭</span> Use Cases<span class="num">7</span></a
+          >
+          <a href="#s7"
+            ><span class="icon">📊</span> مقارنة الطرق<span class="num"
+              >8</span
+            ></a
+          >
+          <a href="#terms"
+            ><span class="icon">📚</span> المصطلحات<span class="num">9</span></a
+          >
+          <a href="#recap"
+            ><span class="icon">⚡</span> مراجعة سريعة<span class="num"
+              >10</span
+            ></a
+          >
+          <a href="#exam"
+            ><span class="icon">🏆</span> أسئلة الامتحانات<span class="num"
+              >11</span
+            ></a
+          >
+          <a href="#quiz-main"
+            ><span class="icon">🎮</span> تدريب تفاعلي<span class="num"
+              >12</span
+            ></a
+          >
+        </nav>
+      </aside>
+
+      <!-- MAIN -->
+      <main id="content">
+        <!-- HERO -->
+        <div class="hero" id="hero">
+          <div class="hero-badge">
+            CS251 – Software Engineering I / Winter 2026
+          </div>
+          <h1>Requirements Engineering<br />هندسة المتطلبات</h1>
+          <p>
+            المحاضرة دي هتعلمك إزاي تفهم وتجمع وتوثق متطلبات أي نظام سوفتوير...
+            وهي الخطوة الأهم قبل ما تكتب سطر كود واحد.
+          </p>
+          <div class="hero-stats">
+            <div class="stat">
+              <div class="stat-num">5</div>
+              <div class="stat-label">مراحل الـ RE</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">6</div>
+              <div class="stat-label">طرق توثيق</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">4</div>
+              <div class="stat-label">أنواع متطلبات</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">15+</div>
+              <div class="stat-label">سؤال امتحانات</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ======================== SECTION 0: Pre-Project ======================== -->
+        <div class="section" id="s0">
+          <div class="section-header">
+            <div class="section-icon icon-amber">🚀</div>
+            <div>
+              <div class="section-title">أنشطة ما قبل المشروع</div>
+              <div class="section-num">Pre-Project Activities</div>
+            </div>
+          </div>
+
+          <div class="card card-summary">
+            <div class="card-label label-blue">📋 ملخص سريع</div>
+            <p>
+              قبل ما تبدأ أي مشروع سوفتوير، لازم تعمل 4 خطوات أساسية: تحليل
+              السوق، تحديد العملاء المستهدفين، دراسة الجدوى، وبعدين تعمل خطة عمل
+              واضحة.
+            </p>
+          </div>
+
+          <div class="explain-block open">
+            <div class="explain-toggle" onclick="toggleExplain(this)">
+              <div class="explain-toggle-title">🔎 شرح مفصل</div>
+              <div class="explain-arrow">▼</div>
+            </div>
+            <div class="explain-content">
+              <p>
+                يا معلم، تخيل إنك عايز تعمل app جديدة... هتبدأ مباشرة تكود؟ لأ!
+                في خطوات مهمة قبل كده.
+              </p>
+
+              <p>
+                <strong style="color: var(--teal)"
+                  >1. Market / Gap Analysis</strong
+                >
+                – بتشوف السوق عامل إزاي في الموضوع ده، وإيه الـ "gap" يعني
+                الفراغ اللي مفيش حاجة بتملاه. مثلاً: في مصر فيه gap في موضوع الـ
+                mobile payments للمحتاجينش بنوك.
+              </p>
+
+              <p>
+                <strong style="color: var(--teal)"
+                  >2. Market Segmentation</strong
+                >
+                – مين اللي هيستخدم الـ app دي؟ طلاب جامعة؟ أصحاب مشاريع صغيرة؟
+                ناس في الريف؟ محتاج تحدد الـ demographics (السن، الدخل، مستوى
+                التعليم).
+              </p>
+
+              <p>
+                <strong style="color: var(--teal)">3. Feasibility Study</strong>
+                – هل المشروع ده ممكن فعلاً؟ في 4 أنواع من الجدوى: <br />-
+                <strong>Technical</strong>: التكنولوجيا والـ skills موجودة؟
+                <br />- <strong>Economic</strong>: هيكلف قد إيه؟ هيرجع كام؟
+                (ROI) <br />- <strong>Legal</strong>: في قوانين بتمنعه؟ <br />-
+                <strong>Schedule</strong>: ينتهي في الوقت المطلوب؟
+              </p>
+
+              <p>
+                <strong style="color: var(--teal)"
+                  >4. High-Level Business Plan</strong
+                >
+                – خطة شاملة بـ: <br />- <strong>Project Goals</strong>: أهداف
+                SMART (Specific, Measurable, Achievable, Relevant, Time-bound)
+                <br />- <strong>Value Proposition</strong>: إيه اللي بيميزك عن
+                المنافسين؟ <br />- <strong>Financial Outlook</strong>: تكاليف
+                التطوير والتشغيل والإيرادات المتوقعة
+              </p>
+            </div>
+          </div>
+
+          <div class="card card-exam">
+            <div class="card-label label-red">⚠️ خد بالك امتحانياً</div>
+            <ul>
+              <li>
+                الـ <strong>SMART goals</strong> = Specific, Measurable,
+                Achievable, Relevant, Time-bound – احفظها كويس
+              </li>
+              <li>
+                الـ <strong>Value Proposition</strong> بتوضح إيه اللي يميز
+                المنتج عن المنافسين
+              </li>
+              <li>
+                الـ <strong>Feasibility Study</strong> بيشمل 4 أنواع: Technical,
+                Economic, Legal, Schedule
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ======================== SECTION 1: Domain Analysis ======================== -->
+        <div class="section" id="s1">
+          <div class="section-header">
+            <div class="section-icon icon-blue">🔍</div>
+            <div>
+              <div class="section-title">تحليل المجال</div>
+              <div class="section-num">Domain Analysis</div>
+            </div>
+          </div>
+
+          <div class="card card-definition">
+            <div class="card-label label-green">📖 تعريف</div>
+            <h4>Domain Analysis</h4>
+            <p>
+              هو العملية اللي المهندس بيتعلم فيها عن مجال الـ domain عشان يفهم
+              المشكلة بشكل أعمق. الـ domain هو المجال العام اللي هيشتغل فيه
+              البرنامج.
+            </p>
+          </div>
+
+          <div class="explain-block">
+            <div class="explain-toggle" onclick="toggleExplain(this)">
+              <div class="explain-toggle-title">
+                🎯 ليه Domain Analysis مهم؟
+              </div>
+              <div class="explain-arrow">▼</div>
+            </div>
+            <div class="explain-content">
+              <p>
+                مثلاً: عايز تعمل نظام لمستشفى. مش هتقدر تصمم النظام صح غير لو
+                فهمت كويس إزاي المستشفى بتشتغل، إيه العمليات الموجودة، مين الناس
+                اللي بتستخدمه...
+              </p>
+              <ul>
+                <li>
+                  <strong style="color: var(--green)"
+                    >Faster Development</strong
+                  >
+                  – لما تفهم المجال، بتكتب كود أسرع
+                </li>
+                <li>
+                  <strong style="color: var(--green)">Better System</strong> –
+                  النظام بيبقى أكثر ملاءمة لاحتياجات الناس
+                </li>
+                <li>
+                  <strong style="color: var(--green)"
+                    >Avoiding Misunderstanding</strong
+                  >
+                  – بتتجنب سوء الفهم مع العميل
+                </li>
+                <li>
+                  <strong style="color: var(--green)"
+                    >Anticipation of Extensions</strong
+                  >
+                  – بتقدر تتوقع التطويرات المستقبلية
+                </li>
+              </ul>
+              <p>
+                <strong>ومين الـ Domain Expert؟</strong> هو الشخص اللي عنده
+                معرفة عميقة جداً في المجال ده. في سؤال امتحان 2022: "The person
+                that is going to be the source of knowledge about the field..."
+                – الجواب:
+                <strong style="color: var(--accent)">Domain Expert</strong>
+              </p>
+            </div>
+          </div>
+
+          <div class="card card-warning">
+            <div class="card-label label-amber">
+              📄 محتوى وثيقة Domain Analysis
+            </div>
+            <ul>
+              <li><strong>A. Introduction</strong> – مقدمة عامة</li>
+              <li>
+                <strong>B. Glossary</strong> – قاموس المصطلحات الخاصة بالمجال
+              </li>
+              <li>
+                <strong>C. General Knowledge</strong> – معلومات عامة عن المجال
+              </li>
+              <li>
+                <strong>D. Customers & Users</strong> – مين العملاء والمستخدمين
+              </li>
+              <li>
+                <strong>E. The Environment</strong> – البيئة اللي بيشتغل فيها
+                النظام
+              </li>
+              <li>
+                <strong>F. Tasks & Procedures</strong> – العمليات الموجودة
+                حالياً
+              </li>
+              <li><strong>G. Competing Software</strong> – البرامج المنافسة</li>
+              <li>
+                <strong>H. Similarities to Other Domains</strong> – التشابه مع
+                مجالات تانية
+              </li>
+            </ul>
+          </div>
+
+          <div class="card card-exam">
+            <div class="card-label label-red">💡 سؤال امتحان 2022</div>
+            <p>
+              <strong>Q7:</strong> The person that is going to be the source of
+              knowledge about the field I am writing an application for and will
+              give me all the needed information is called:
+            </p>
+            <p style="margin-top: 0.5rem; color: var(--green)">
+              ✅ الجواب: <strong>Domain Expert</strong>
+            </p>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ======================== SECTION 2: RE Overview ======================== -->
+        <div class="section" id="s2">
+          <div class="section-header">
+            <div class="section-icon icon-teal">📋</div>
+            <div>
+              <div class="section-title">هندسة المتطلبات</div>
+              <div class="section-num">Requirements Engineering (RE)</div>
+            </div>
+          </div>
+
+          <div class="card card-definition">
+            <div class="card-label label-green">📖 تعريف أساسي</div>
+            <h4>Requirement ما هو؟</h4>
+            <p>
+              هو statement بيوصف: (1) جانب من اللي المفروض النظام يعمله، أو (2)
+              constraint على عملية التطوير. ولازم يساهم في حل مشكلة العميل.
+            </p>
+            <p style="margin-top: 0.6rem">
+              مجموع كل الـ requirements بيتسمى
+              <strong class="highlight-en">SRS</strong> (Software Requirements
+              Specification).
+            </p>
+          </div>
+
+          <div class="card card-definition">
+            <div class="card-label label-green">
+              📖 تعريف Requirements Engineering
+            </div>
+            <p>
+              هو عملية تعريف وتوثيق وصيانة متطلبات النظام. هو أساس كل مراحل
+              تطوير السوفتوير لأنه بيحدد إيه اللي المفروض ينبني.
+            </p>
+          </div>
+
+          <div class="explain-block">
+            <div class="explain-toggle" onclick="toggleExplain(this)">
+              <div class="explain-toggle-title">
+                👥 مين هم الـ Stakeholders؟
+              </div>
+              <div class="explain-arrow">▼</div>
+            </div>
+            <div class="explain-content">
+              <p>
+                الـ <strong>Stakeholder</strong> هو أي شخص أو مجموعة عندهم مصلحة
+                في النظام:
+              </p>
+              <ul>
+                <li>
+                  <strong style="color: var(--accent)">Client (العميل)</strong>
+                  – صاحب الفلوس اللي بيدفع
+                </li>
+                <li>
+                  <strong style="color: var(--teal)">End Users</strong> – اللي
+                  هيستخدم النظام فعلاً
+                </li>
+                <li>
+                  <strong style="color: var(--blue)">Developers</strong> –
+                  المهندسين اللي بيبنوا النظام
+                </li>
+                <li>
+                  <strong style="color: var(--purple)">Managers</strong> –
+                  المدراء
+                </li>
+                <li>
+                  <strong style="color: var(--pink)">Regulatory Bodies</strong>
+                  – هيئات حكومية أو قانونية
+                </li>
+              </ul>
+              <p>
+                خد بالك: الـ client ≠ الـ end user دايماً! مثلاً: وزارة الصحة هي
+                الـ client، لكن الـ end users هم الأطباء والممرضين.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ======================== SECTION 3: Types of Requirements ======================== -->
+        <div class="section" id="s3">
+          <div class="section-header">
+            <div class="section-icon icon-purple">🎯</div>
+            <div>
+              <div class="section-title">أنواع المتطلبات</div>
+              <div class="section-num">Types of Requirements</div>
+            </div>
+          </div>
+
+          <div class="req-types">
+            <div class="req-type-card">
+              <h5>
+                ⚙️
+                <span style="color: var(--blue)">Functional Requirements</span>
+              </h5>
+              <p
+                style="
+                  font-size: 0.85rem;
+                  color: var(--text2);
+                  margin-bottom: 0.6rem;
+                "
+              >
+                بتحدد إيه اللي النظام بيعمله
+              </p>
+              <ul>
+                <li>تسجيل الدخول</li>
+                <li>البحث عن منتج</li>
+                <li>إضافة للسلة</li>
+                <li>إتمام الشراء</li>
+              </ul>
+            </div>
+            <div class="req-type-card">
+              <h5>
+                ✨
+                <span style="color: var(--teal)"
+                  >Non-Functional Requirements</span
+                >
+              </h5>
+              <p
+                style="
+                  font-size: 0.85rem;
+                  color: var(--text2);
+                  margin-bottom: 0.6rem;
+                "
+              >
+                بتحدد إزاي النظام بيشتغل
+              </p>
+              <ul>
+                <li>Performance (سرعة)</li>
+                <li>Security (أمان)</li>
+                <li>Scalability (قابلية التوسع)</li>
+                <li>Usability (سهولة الاستخدام)</li>
+              </ul>
+            </div>
+            <div class="req-type-card">
+              <h5>
+                📊
+                <span style="color: var(--accent)">Business Requirements</span>
+              </h5>
+              <p
+                style="
+                  font-size: 0.85rem;
+                  color: var(--text2);
+                  margin-bottom: 0.6rem;
+                "
+              >
+                أهداف المنظمة الكبيرة
+              </p>
+              <ul>
+                <li>زيادة مبيعات 20%</li>
+                <li>تقليل التكاليف</li>
+                <li>الوصول لشريحة جديدة</li>
+              </ul>
+            </div>
+            <div class="req-type-card">
+              <h5>
+                🔄
+                <span style="color: var(--green)">Transition Requirements</span>
+              </h5>
+              <p
+                style="
+                  font-size: 0.85rem;
+                  color: var(--text2);
+                  margin-bottom: 0.6rem;
+                "
+              >
+                مؤقتة أثناء الانتقال للنظام الجديد
+              </p>
+              <ul>
+                <li>تدريب الموظفين</li>
+                <li>تحويل البيانات القديمة</li>
+                <li>تشغيل النظامين معاً</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card card-tip">
+            <div class="card-label label-purple">🎓 فكرة مهمة امتحانياً</div>
+            <p>الـ <strong>Non-Functional Requirements</strong> بتنقسم لـ:</p>
+            <ul style="margin-top: 0.5rem">
+              <li>
+                <strong>Software Quality requirements</strong> – مستوى الجودة
+              </li>
+              <li>
+                <strong>Platform requirements</strong> – قيود بيئة التشغيل
+              </li>
+              <li>
+                <strong>Process requirements</strong> – قيود على طريقة التطوير
+              </li>
+            </ul>
+            <p style="margin-top: 0.6rem; color: var(--accent)">
+              سؤال 2022: "The system will be able to print to an LC-9 plotter" →
+              <strong>Platform requirement</strong> (مش Functional!)
+            </p>
+          </div>
+
+          <div class="explain-block">
+            <div class="explain-toggle" onclick="toggleExplain(this)">
+              <div class="explain-toggle-title">
+                ✅ خصائص المتطلب الكويس (Good Requirement)
+              </div>
+              <div class="explain-arrow">▼</div>
+            </div>
+            <div class="explain-content">
+              <ul>
+                <li>
+                  <strong style="color: var(--green)">Complete (مكتمل)</strong>
+                  – بيحتوي على كل المعلومات اللازمة للتنفيذ والاختبار
+                </li>
+                <li>
+                  <strong style="color: var(--blue)">Unambiguous (واضح)</strong>
+                  – له تفسير واحد بس، مش متعدد التفسيرات
+                </li>
+                <li>
+                  <strong style="color: var(--teal)">Consistent (متسق)</strong>
+                  – مش بيتعارض مع متطلبات تانية
+                </li>
+                <li>
+                  <strong style="color: var(--purple)"
+                    >Verifiable (قابل للتحقق)</strong
+                  >
+                  – تقدر تختبره وتتأكد منه
+                </li>
+                <li>
+                  <strong style="color: var(--accent)"
+                    >Traceable (قابل للتتبع)</strong
+                  >
+                  – ترجعه لمصدره وتربطه بأهداف المشروع
+                </li>
+              </ul>
+
+              <p style="margin-top: 0.8rem">
+                <strong style="color: var(--red)"
+                  >مثال متطلب غير متسق (Inconsistency):</strong
+                >
+              </p>
+              <p>• "النظام يسمح بالشراء بنقرة واحدة وحفظ بيانات الكارت"</p>
+              <p>
+                • "النظام لا يحفظ بيانات الكارت بعد الشراء" ← هنا تناقض! ده
+                Inconsistency.
+              </p>
+
+              <p style="margin-top: 0.8rem">
+                <strong style="color: var(--red)"
+                  >مثال متطلب غير قابل للتحقق:</strong
+                >
+              </p>
+              <p>❌ "النظام يجب أن يكون سريعاً وآمناً" – مش قابل للقياس</p>
+              <p>✅ "النظام يعالج 1000 transaction/second" – قابل للقياس</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ======================== SECTION 4: RE Process ======================== -->
+        <div class="section" id="s4">
+          <div class="section-header">
+            <div class="section-icon icon-green">📝</div>
+            <div>
+              <div class="section-title">مراحل هندسة المتطلبات</div>
+              <div class="section-num">Requirements Engineering Process</div>
+            </div>
+          </div>
+
+          <div class="card card-exam">
+            <div class="card-label label-red">⭐ مهم جداً – الترتيب الصح!</div>
+            <p>الترتيب الصح للمراحل حسب الامتحانات:</p>
+            <p
+              style="
+                margin-top: 0.5rem;
+                font-family: var(--font-en);
+                font-size: 0.9rem;
+                color: var(--teal);
+              "
+            >
+              Elicitation → Analysis/Negotiation → Specification/Documentation →
+              Validation → Management
+            </p>
+            <p style="margin-top: 0.5rem; color: var(--accent)">
+              سؤال 2022 Q8: الجواب = (d) Elicitation, negotiation,
+              documentation, validation ✅
+            </p>
+          </div>
+
+          <ul class="steps-list">
+            <li class="step-item">
+              <div class="step-content">
+                <h5>Requirements Elicitation (جمع المتطلبات)</h5>
+                <p>
+                  جمع المعلومات من الـ stakeholders بكل الطرق المتاحة:
+                  Interviews, Surveys, Brainstorming, Focus Groups, Observation,
+                  Prototyping, Use Cases
+                </p>
+              </div>
+            </li>
+            <li class="step-item">
+              <div class="step-content">
+                <h5>Requirements Analysis / Negotiation (التحليل والتفاوض)</h5>
+                <p>
+                  بعد الجمع، بنفحص المتطلبات: إيه اللي بيتعارض؟ إيه الأولويات؟
+                  إيه المبهم؟ وبنتفاوض مع الـ stakeholders.
+                </p>
+              </div>
+            </li>
+            <li class="step-item">
+              <div class="step-content">
+                <h5>Requirements Specification / Documentation (التوثيق)</h5>
+                <p>
+                  توثيق المتطلبات بشكل رسمي: SRS، Use Cases، User Stories،
+                  EARS...
+                </p>
+              </div>
+            </li>
+            <li class="step-item">
+              <div class="step-content">
+                <h5>Requirements Validation (التحقق)</h5>
+                <p>
+                  التأكد إن المتطلبات بتطابق فعلاً احتياجات الـ stakeholders:
+                  Reviews, Prototypes, Simulations, User Feedback
+                </p>
+              </div>
+            </li>
+            <li class="step-item">
+              <div class="step-content">
+                <h5>Requirements Management (الإدارة)</h5>
+                <p>
+                  عملية مستمرة: تتابع التغييرات، Traceability، Version Control
+                  للمتطلبات.
+                </p>
+              </div>
+            </li>
+          </ul>
+
+          <div class="explain-block">
+            <div class="explain-toggle" onclick="toggleExplain(this)">
+              <div class="explain-toggle-title">
+                🧠 طرق جمع المتطلبات بالتفصيل
+              </div>
+              <div class="explain-arrow">▼</div>
+            </div>
+            <div class="explain-content">
+              <p>
+                <strong style="color: var(--teal)">Interviews:</strong> مقابلات
+                مع الـ stakeholders. تسأل عن التفاصيل، الـ vision، أفكار بديلة،
+                وبتطلب منهم يرسموا diagrams.
+              </p>
+              <p>
+                <strong style="color: var(--teal)">Brainstorming:</strong> جلسة
+                جماعية بمشرف (moderator). كل واحد يكتب أفكاره ويمرر الورقة
+                للجنبه. بتجيب أفكار مش ممكن تيجي في مقابلة فردية.
+              </p>
+              <p>
+                <strong style="color: var(--teal)">Prototyping:</strong> عرض
+                نماذج أولية (حتى لو مجرد صور) للمستخدمين عشان يتخيلوا النظام.
+              </p>
+              <p>
+                <strong style="color: var(--teal)">Use Case Analysis:</strong>
+                تحديد الـ actors والعمليات اللي بيعملوها مع النظام.
+              </p>
+            </div>
+          </div>
+
+          <div class="card card-tip">
+            <div class="card-label label-purple">⚠️ تحديات الـ RE</div>
+            <ul>
+              <li><strong>Ambiguity</strong> – متطلبات مبهمة</li>
+              <li>
+                <strong>Conflicting Requirements</strong> – متطلبات متعارضة بين
+                stakeholders مختلفة
+              </li>
+              <li><strong>Incomplete Requirements</strong> – متطلبات ناقصة</li>
+              <li>
+                <strong>Changing Requirements</strong> – المتطلبات بتتغير طول
+                الوقت
+              </li>
+              <li>
+                <strong>Communication Barriers</strong> – اختلاف المصطلحات بين
+                الـ stakeholders
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ======================== SECTION 5: Methods for Documenting ======================== -->
+        <div class="section" id="s5">
+          <div class="section-header">
+            <div class="section-icon icon-amber">📄</div>
+            <div>
+              <div class="section-title">طرق توثيق المتطلبات</div>
+              <div class="section-num">Methods for Specifying Requirements</div>
+            </div>
+          </div>
+
+          <div class="explain-block open">
+            <div class="explain-toggle" onclick="toggleExplain(this)">
+              <div class="explain-toggle-title">
+                1️⃣ Natural Language (اللغة الطبيعية)
+              </div>
+              <div class="explain-arrow">▼</div>
+            </div>
+            <div class="explain-content">
+              <p>
+                ببساطة: بتكتب المتطلبات بالعربي أو الإنجليزي العادي. أسهل طريقة
+                لكن ممكن تكون مبهمة.
+              </p>
+              <p style="color: var(--text3); font-style: italic">
+                مثال: "النظام يسمح للمستخدمين بتسجيل الدخول باسم المستخدم وكلمة
+                السر."
+              </p>
+            </div>
+          </div>
+
+          <div class="explain-block">
+            <div class="explain-toggle" onclick="toggleExplain(this)">
+              <div class="explain-toggle-title">
+                2️⃣ IEEE SRS Template (الوثيقة الرسمية)
+              </div>
+              <div class="explain-arrow">▼</div>
+            </div>
+            <div class="explain-content">
+              <p>وثيقة منظمة بمعيار IEEE 830-1998 بتشمل:</p>
+              <ul>
+                <li>
+                  <strong>Section 1 – Introduction:</strong> Purpose, Scope,
+                  Definitions, References, Overview
+                </li>
+                <li>
+                  <strong>Section 2 – Overall Description:</strong> Product
+                  Perspective, Functions, User Characteristics, Constraints,
+                  Assumptions
+                </li>
+                <li>
+                  <strong>Section 3 – Specific Requirements:</strong> External
+                  Interfaces, Functional Req., Performance, Design Constraints,
+                  Quality Req.
+                </li>
+              </ul>
+              <p style="color: var(--accent); margin-top: 0.6rem">
+                في تحديث أحدث: IEEE 29148-2011
+              </p>
+            </div>
+          </div>
+
+          <div class="explain-block">
+            <div class="explain-toggle" onclick="toggleExplain(this)">
+              <div class="explain-toggle-title">
+                3️⃣ Formal Specifications (المواصفات الرسمية)
+              </div>
+              <div class="explain-arrow">▼</div>
+            </div>
+            <div class="explain-content">
+              <p>
+                بتستخدم رياضيات أو pseudocode أو لغات زي Z language عشان تكون
+                دقيقة جداً ومش قابلة لتفسيرات متعددة.
+              </p>
+              <p>
+                بتُستخدم في: الأنظمة الحرجة (Critical Systems) اللي أي error
+                فيها ممكن يسبب كوارث زي أنظمة الطيران أو المستشفيات.
+              </p>
+            </div>
+          </div>
+
+          <div class="explain-block">
+            <div class="explain-toggle" onclick="toggleExplain(this)">
+              <div class="explain-toggle-title">
+                4️⃣ User Stories (قصص المستخدم)
+              </div>
+              <div class="explain-arrow">▼</div>
+            </div>
+            <div class="explain-content">
+              <p>طريقة مشهورة في الـ Agile وScrum. الصيغة:</p>
+              <p
+                style="
+                  background: var(--bg2);
+                  padding: 0.8rem;
+                  border-radius: 8px;
+                  font-family: var(--font-en);
+                  font-size: 0.85rem;
+                  margin: 0.6rem 0;
+                  border: 1px solid var(--border);
+                "
+              >
+                As a [user type],<br />I want to [action],<br />so that
+                [benefit].
+              </p>
+              <p>
+                وبتتضمن <strong>Acceptance Criteria</strong> = شروط القبول اللي
+                بتحدد امتى نعتبر الـ story منتهية.
+              </p>
+              <p style="color: var(--red); margin-top: 0.6rem">
+                ⚠️ User Story المبهمة: "As a user, I want the UI to be friendly
+                and modern" – ده مبهم ومش قابل للاختبار!
+              </p>
+              <p style="color: var(--accent)">
+                سؤال 2025 Q3: أكثر user story vague = الإجابة (c) "I want the UI
+                to be friendly and modern"
+              </p>
+            </div>
+          </div>
+
+          <div class="explain-block">
+            <div class="explain-toggle" onclick="toggleExplain(this)">
+              <div class="explain-toggle-title">4.5️⃣ Enriched User Stories</div>
+              <div class="explain-arrow">▼</div>
+            </div>
+            <div class="explain-content">
+              <p>
+                خليط من User Story + Prototype + Data Dictionary + Use Case +
+                Acceptance Criteria.
+              </p>
+              <p>
+                الميزة: بتحسن التواصل بين الفريق كله وتعطي فهم واضح لكل تفاصيل
+                الـ story.
+              </p>
+            </div>
+          </div>
+
+          <div class="explain-block">
+            <div class="explain-toggle" onclick="toggleExplain(this)">
+              <div class="explain-toggle-title">5️⃣ Use Cases (من الـ UML)</div>
+              <div class="explain-arrow">▼</div>
+            </div>
+            <div class="explain-content">
+              <p>بتوصف التفاعل بين المستخدم والنظام خطوة بخطوة. بتشمل:</p>
+              <ul>
+                <li><strong>Name:</strong> اسم الـ Use Case</li>
+                <li><strong>Actors:</strong> مين اللي بيشارك</li>
+                <li><strong>Preconditions:</strong> الشروط قبل البدء</li>
+                <li><strong>Main Flow:</strong> الخطوات الأساسية</li>
+                <li>
+                  <strong>Alternative Flows:</strong> السيناريوهات البديلة
+                  والأخطاء
+                </li>
+                <li>
+                  <strong>Postconditions:</strong> حالة النظام بعد الانتهاء
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="explain-block">
+            <div class="explain-toggle" onclick="toggleExplain(this)">
+              <div class="explain-toggle-title">6️⃣ EARS Method</div>
+              <div class="explain-arrow">▼</div>
+            </div>
+            <div class="explain-content">
+              <p>
+                اختصار Easy Approach to Requirements Syntax. بتستخدم قالب محدد:
+              </p>
+              <p
+                style="
+                  background: var(--bg2);
+                  padding: 0.8rem;
+                  border-radius: 8px;
+                  font-family: var(--font-en);
+                  font-size: 0.85rem;
+                  margin: 0.6rem 0;
+                  border: 1px solid var(--border);
+                "
+              >
+                <strong style="color: var(--teal)">When</strong>
+                [pre-condition/trigger]<br />
+                <strong style="color: var(--blue)">then</strong> [system
+                response]<br />
+                <strong style="color: var(--accent)">If</strong>
+                [condition]<br />
+                <strong style="color: var(--blue)">then</strong>
+                [response]<br />
+                <strong style="color: var(--red)">Else</strong> [alternative
+                response]
+              </p>
+              <p>
+                الميزة: دقيق وقابل للاختبار، وفي نفس الوقت بسيط وسهل للقراءة.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ======================== SECTION 6: Use Cases ======================== -->
+        <div class="section" id="s6">
+          <div class="section-header">
+            <div class="section-icon icon-pink">🎭</div>
+            <div>
+              <div class="section-title">Use Cases بالتفصيل</div>
+              <div class="section-num">Use Case Modeling</div>
+            </div>
+          </div>
+
+          <div class="card card-summary">
+            <div class="card-label label-blue">📋 الهدف</div>
+            <p>
+              Use Case Modeling بتنظر للنظام من زاوية المستخدم: إزاي يتفاعل معاه
+              وإيه اللي يحاول يوصله.
+            </p>
+          </div>
+
+          <div class="explain-block open">
+            <div class="explain-toggle" onclick="toggleExplain(this)">
+              <div class="explain-toggle-title">
+                🎭 خطوات بناء Use Case Model
+              </div>
+              <div class="explain-arrow">▼</div>
+            </div>
+            <div class="explain-content">
+              <p>
+                <strong style="color: var(--accent)"
+                  >Step 1: تحديد الـ Actors</strong
+                >
+              </p>
+              <p>الـ Actor هو كيان بيتفاعل مع النظام. اسأل:</p>
+              <ul>
+                <li>مين اللي بيستخدم النظام؟</li>
+                <li>مين اللي بيشغله أو بيقفله؟</li>
+                <li>مين بييجي منه معلومات؟</li>
+                <li>مين بياخد منه معلومات؟</li>
+                <li>في أنظمة تانية بتتكلم معاه؟</li>
+              </ul>
+              <p style="margin-top: 0.6rem">
+                <strong style="color: var(--accent)"
+                  >Step 2: تحديد الـ Use Cases</strong
+                >
+              </p>
+              <p>
+                بعد ما حددت الـ actors، اسأل: إيه اللي كل actor هيعمله مع
+                النظام؟
+              </p>
+              <p style="margin-top: 0.6rem">
+                <strong style="color: var(--accent)"
+                  >Step 3: رسم Use Case Diagram</strong
+                >
+              </p>
+              <p>دايرة بيض = Use Case، آدمي = Actor، خط = علاقة.</p>
+            </div>
+          </div>
+
+          <div class="card card-tip">
+            <div class="card-label label-purple">📐 مكونات الـ Use Case</div>
+            <ul>
+              <li><strong>Name</strong> – اسم واضح ومختصر</li>
+              <li><strong>Actors</strong> – من يشارك؟</li>
+              <li><strong>Goals</strong> – ما الذي يحاول المستخدم تحقيقه؟</li>
+              <li>
+                <strong>Preconditions</strong> – ما يجب أن يكون صحيحاً قبل البدء
+              </li>
+              <li><strong>Summary</strong> – وصف مختصر</li>
+              <li>
+                <strong>Steps</strong> – تنسيق عمودين: Actor Actions | System
+                Responses
+              </li>
+              <li>
+                <strong>Postconditions</strong> – حالة النظام بعد الانتهاء
+              </li>
+              <li>
+                <strong>Alternative Flows</strong> – السيناريوهات الاستثنائية
+              </li>
+            </ul>
+          </div>
+
+          <div class="card card-definition">
+            <div class="card-label label-green">
+              📖 مثال: Use Case "Check Out Item" (Library)
+            </div>
+            <p><strong>Actor:</strong> Clerk</p>
+            <p><strong>Goal:</strong> إعارة كتاب لمستعير</p>
+            <p><strong>Preconditions:</strong> المستخدم مسموح له بالاستعارة</p>
+            <p>
+              <strong>Main Flow:</strong> Clerk يدخل ID → النظام يفتح صفحة
+              المستخدم → Clerk يسكن باركود الكتاب → النظام يضيف الكتاب لسجل
+              الاستعارة
+            </p>
+            <p>
+              <strong>Exceptional Flow:</strong> لو المستخدم موقوف، زرار
+              الاستعارة يكون disabled
+            </p>
+          </div>
+
+          <div class="card card-exam">
+            <div class="card-label label-red">💡 Use Case – قاعدة مهمة</div>
+            <ul>
+              <li>بيغطي التسلسل الكامل من أول المهمة لآخرها</li>
+              <li>
+                بيوصف تفاعل المستخدم مع النظام <strong>فقط</strong> (مش العمليات
+                الداخلية)
+              </li>
+              <li>بيتكتب مستقل عن تصميم الـ UI قدر الإمكان</li>
+              <li>
+                فقط actions المستخدم-النظام، مش العمليات اليدوية أو الداخلية
+                البحتة
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ======================== SECTION 7: Comparison ======================== -->
+        <div class="section" id="s7">
+          <div class="section-header">
+            <div class="section-icon icon-blue">📊</div>
+            <div>
+              <div class="section-title">مقارنة طرق التوثيق</div>
+              <div class="section-num">Comparison of Methods</div>
+            </div>
+          </div>
+
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th>الطريقة</th>
+                <th>الخصائص</th>
+                <th>متى تستخدمها؟</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="en-cell">Natural Language</td>
+                <td>سهلة لكن ممكن تكون مبهمة</td>
+                <td>المناقشات الأولية أو الجمهور العام</td>
+              </tr>
+              <tr>
+                <td class="en-cell">Formal Specs (Z Language)</td>
+                <td>دقيقة جداً، مش قابلة للغموض، قابلة للآلة</td>
+                <td>الأنظمة الحرجة والتحقق الرسمي</td>
+              </tr>
+              <tr>
+                <td class="en-cell">User Stories</td>
+                <td>بسيطة، مركزة على المستخدم، مع Acceptance Criteria</td>
+                <td>Agile Development، Product Backlog</td>
+              </tr>
+              <tr>
+                <td class="en-cell">Use Cases</td>
+                <td>تصف التفاعل خطوة بخطوة</td>
+                <td>نمذجة سلوك النظام، OOP Design</td>
+              </tr>
+              <tr>
+                <td class="en-cell">EARS Method</td>
+                <td>منظم وبسيط، دقيق وقابل للاختبار</td>
+                <td>لما تحتاج دقة مع بساطة</td>
+              </tr>
+              <tr>
+                <td class="en-cell">IEEE SRS</td>
+                <td>وثيقة كاملة رسمية</td>
+                <td>المشاريع الكبيرة والرسمية</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="card card-tip">
+            <div class="card-label label-purple">🔑 قاعدة بسيطة</div>
+            <p>من الأقل دقة للأكثر دقة:</p>
+            <p
+              style="
+                margin-top: 0.5rem;
+                font-family: var(--font-en);
+                font-size: 0.85rem;
+                color: var(--teal);
+              "
+            >
+              Natural Language ← → Formal Specs (Z)
+            </p>
+            <p style="color: var(--text2); margin-top: 0.4rem">
+              User Stories و Use Cases و EARS في المنتصف بدرجات متفاوتة
+            </p>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ======================== TERMS ======================== -->
+        <div class="section" id="terms">
+          <div class="section-header">
+            <div class="section-icon icon-teal">📚</div>
+            <div>
+              <div class="section-title">المصطلحات المهمة</div>
+              <div class="section-num">Key Terms – اضغط لتعرف أكثر</div>
+            </div>
+          </div>
+
+          <div class="terms-grid">
+            <div class="term-card" onclick="flipTerm(this)">
+              <div class="term-en">Domain Analysis</div>
+              <div class="term-ar">تحليل المجال</div>
+              <div class="term-desc">عملية تعلم المهندس عن مجال العمل</div>
+              <div class="term-why">
+                💡 امتحانياً: الـ Domain Expert هو المصدر الرئيسي للمعلومات
+              </div>
+            </div>
+            <div class="term-card" onclick="flipTerm(this)">
+              <div class="term-en">Requirements Engineering</div>
+              <div class="term-ar">هندسة المتطلبات</div>
+              <div class="term-desc">تعريف وتوثيق وصيانة متطلبات النظام</div>
+              <div class="term-why">
+                💡 الخطأ الشائع: إن الـ RE مرحلة واحدة بس – هو في الواقع 5 مراحل
+              </div>
+            </div>
+            <div class="term-card" onclick="flipTerm(this)">
+              <div class="term-en">SRS</div>
+              <div class="term-ar">Software Requirements Specification</div>
+              <div class="term-desc">وثيقة المتطلبات الكاملة</div>
+              <div class="term-why">
+                💡 مجموع كل الـ requirements المتفق عليها
+              </div>
+            </div>
+            <div class="term-card" onclick="flipTerm(this)">
+              <div class="term-en">Stakeholder</div>
+              <div class="term-ar">أصحاب المصلحة</div>
+              <div class="term-desc">أي فرد أو مجموعة لها مصلحة في النظام</div>
+              <div class="term-why">💡 Client ≠ End User دايماً!</div>
+            </div>
+            <div class="term-card" onclick="flipTerm(this)">
+              <div class="term-en">Functional Requirement</div>
+              <div class="term-ar">متطلب وظيفي</div>
+              <div class="term-desc">ماذا يفعل النظام</div>
+              <div class="term-why">💡 مثال: "يسمح للمستخدم بتسجيل الدخول"</div>
+            </div>
+            <div class="term-card" onclick="flipTerm(this)">
+              <div class="term-en">Non-Functional Requirement</div>
+              <div class="term-ar">متطلب غير وظيفي</div>
+              <div class="term-desc">كيف يعمل النظام (جودة، أمان، سرعة...)</div>
+              <div class="term-why">
+                💡 Platform req. مثل "يطبع على LC-9 plotter" هو NFR!
+              </div>
+            </div>
+            <div class="term-card" onclick="flipTerm(this)">
+              <div class="term-en">Use Case</div>
+              <div class="term-ar">حالة الاستخدام</div>
+              <div class="term-desc">تسلسل من الخطوات لإنجاز مهمة معينة</div>
+              <div class="term-why">
+                💡 الأهم: الاسم والخطوات (Name & Steps)
+              </div>
+            </div>
+            <div class="term-card" onclick="flipTerm(this)">
+              <div class="term-en">Actor</div>
+              <div class="term-ar">الممثل</div>
+              <div class="term-desc">
+                كيان يتفاعل مع النظام (مستخدم أو نظام آخر)
+              </div>
+              <div class="term-why">
+                💡 مش لازم يكون إنسان! ممكن يكون نظام خارجي
+              </div>
+            </div>
+            <div class="term-card" onclick="flipTerm(this)">
+              <div class="term-en">User Story</div>
+              <div class="term-ar">قصة المستخدم</div>
+              <div class="term-desc">
+                As a [user], I want [action], so that [benefit]
+              </div>
+              <div class="term-why">
+                💡 مشهورة في Agile/Scrum – Q10 في 2022: الجواب User Story
+              </div>
+            </div>
+            <div class="term-card" onclick="flipTerm(this)">
+              <div class="term-en">Elicitation</div>
+              <div class="term-ar">استخلاص / جمع المتطلبات</div>
+              <div class="term-desc">أول مرحلة في الـ RE</div>
+              <div class="term-why">
+                💡 الترتيب: Elicitation أول حاجة دايماً
+              </div>
+            </div>
+            <div class="term-card" onclick="flipTerm(this)">
+              <div class="term-en">Feasibility Study</div>
+              <div class="term-ar">دراسة الجدوى</div>
+              <div class="term-desc">
+                تقييم إمكانية تنفيذ المشروع (Technical, Economic, Legal,
+                Schedule)
+              </div>
+              <div class="term-why">💡 الـ 4 أنواع مطلوبة في الامتحانات</div>
+            </div>
+            <div class="term-card" onclick="flipTerm(this)">
+              <div class="term-en">EARS</div>
+              <div class="term-ar">Easy Approach to Requirements Syntax</div>
+              <div class="term-desc">
+                طريقة منظمة: When...then...If...then...Else
+              </div>
+              <div class="term-why">💡 دقيقة وبسيطة في نفس الوقت</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ======================== RECAP ======================== -->
+        <div class="section" id="recap">
+          <div class="section-header">
+            <div class="section-icon icon-amber">⚡</div>
+            <div>
+              <div class="section-title">مراجعة سريعة – آخر لحظة</div>
+              <div class="section-num">Last-Minute Revision</div>
+            </div>
+          </div>
+
+          <div class="card card-warning">
+            <div class="card-label label-amber">
+              🔥 الأكثر تكراراً في الامتحانات
+            </div>
+            <ul>
+              <li>
+                ترتيب مراحل الـ RE:
+                <span class="highlight-en"
+                  >Elicitation → Analysis → Specification → Validation →
+                  Management</span
+                >
+              </li>
+              <li>
+                الـ <strong>Domain Expert</strong> هو مصدر المعلومات عن المجال
+              </li>
+              <li>الـ <strong>User Story</strong> هي طريقة Agile الشهيرة</li>
+              <li>"LC-9 plotter" = <strong>Platform requirement</strong></li>
+              <li>
+                الـ <strong>Transition Requirements</strong> مؤقتة وبتنتهي مع
+                اكتمال التنفيذ
+              </li>
+              <li>المتطلب الغامض (Ambiguous) = له أكثر من تفسير</li>
+              <li>
+                الـ <strong>Traceability</strong> = ربط المتطلب بمصدره وأهداف
+                المشروع
+              </li>
+            </ul>
+          </div>
+
+          <div class="recap-grid">
+            <div class="recap-item">
+              <div class="ri-icon">🔢</div>
+              <h5>مراحل RE</h5>
+              <p>5 مراحل بالترتيب – الأكثر تكراراً</p>
+            </div>
+            <div class="recap-item">
+              <div class="ri-icon">📝</div>
+              <h5>User Story</h5>
+              <p>As a [user], I want..., so that...</p>
+            </div>
+            <div class="recap-item">
+              <div class="ri-icon">🎭</div>
+              <h5>Use Case</h5>
+              <p>Actor + Goals + Steps (2 columns)</p>
+            </div>
+            <div class="recap-item">
+              <div class="ri-icon">✅</div>
+              <h5>خصائص المتطلب الكويس</h5>
+              <p>Complete, Unambiguous, Consistent, Verifiable, Traceable</p>
+            </div>
+            <div class="recap-item">
+              <div class="ri-icon">🔍</div>
+              <h5>Domain Analysis</h5>
+              <p>8 sections من A لـ H</p>
+            </div>
+            <div class="recap-item">
+              <div class="ri-icon">💼</div>
+              <h5>Feasibility Study</h5>
+              <p>Technical + Economic + Legal + Schedule</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ======================== EXAM QUESTIONS ======================== -->
+        <div class="section" id="exam">
+          <div class="section-header">
+            <div class="section-icon icon-purple">🏆</div>
+            <div>
+              <div class="section-title">أسئلة الامتحانات السابقة</div>
+              <div class="section-num">
+                Past Exam Questions – اختر الإجابة وشوف النتيجة
+              </div>
+            </div>
+          </div>
+
+          <div class="quiz-section">
+            <div class="quiz-title">📝 Midterm 2022 - Past Questions</div>
+
+            <div
+              class="quiz-q"
+              data-exam-correct="c"
+              data-explanation="الـ Domain Expert هو الشخص اللي عنده معرفة عميقة في المجال، وهو المصدر الأساسي للمعلومات في مرحلة Domain Analysis."
+            >
+              <div class="quiz-q-text">
+                Q7) The person that is going to be the source of knowledge about
+                the field and gives all needed information is called:
+              </div>
+              <div class="quiz-options">
+                <div
+                  class="quiz-option"
+                  onclick="selectExamOption(this)"
+                  data-val="a"
+                >
+                  <div class="quiz-option-label">A</div>
+                  Developer
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectExamOption(this)"
+                  data-val="b"
+                >
+                  <div class="quiz-option-label">B</div>
+                  Manager
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectExamOption(this)"
+                  data-val="c"
+                >
+                  <div class="quiz-option-label">C</div>
+                  Domain Expert
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectExamOption(this)"
+                  data-val="d"
+                >
+                  <div class="quiz-option-label">D</div>
+                  Software Engineer
+                </div>
+              </div>
+              <div class="quiz-feedback exam-feedback"></div>
+            </div>
+
+            <div
+              class="quiz-q"
+              data-exam-correct="d"
+              data-explanation="الترتيب الصح: Elicitation ثم Analysis/Negotiation ثم Documentation/Specification ثم Validation ثم Management."
+            >
+              <div class="quiz-q-text">
+                Q8) The correct order for doing Requirements Engineering is:
+              </div>
+              <div class="quiz-options">
+                <div
+                  class="quiz-option"
+                  onclick="selectExamOption(this)"
+                  data-val="a"
+                >
+                  <div class="quiz-option-label">A</div>
+                  Validation, Documentation, Elicitation, Negotiation
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectExamOption(this)"
+                  data-val="d"
+                >
+                  <div class="quiz-option-label">D</div>
+                  Elicitation, Negotiation, Documentation, Validation
+                </div>
+              </div>
+              <div class="quiz-feedback exam-feedback"></div>
+            </div>
+
+            <div
+              class="quiz-q"
+              data-exam-correct="b"
+              data-explanation="ده Platform requirement لأنه قيد على بيئة التشغيل، وليس وظيفة مباشرة للنظام."
+            >
+              <div class="quiz-q-text">
+                Q9) Classify: "The system will be able to print to an LC-9
+                plotter."
+              </div>
+              <div class="quiz-options">
+                <div
+                  class="quiz-option"
+                  onclick="selectExamOption(this)"
+                  data-val="a"
+                >
+                  <div class="quiz-option-label">A</div>
+                  Functional requirement
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectExamOption(this)"
+                  data-val="b"
+                >
+                  <div class="quiz-option-label">B</div>
+                  Platform requirement
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectExamOption(this)"
+                  data-val="c"
+                >
+                  <div class="quiz-option-label">C</div>
+                  Process requirement
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectExamOption(this)"
+                  data-val="d"
+                >
+                  <div class="quiz-option-label">D</div>
+                  Quality requirement
+                </div>
+              </div>
+              <div class="quiz-feedback exam-feedback"></div>
+            </div>
+
+            <div
+              class="quiz-q"
+              data-exam-correct="a"
+              data-explanation="User Story هي الطريقة الأشهر في Agile/Scrum لتمثيل functionality واحدة من منظور المستخدم."
+            >
+              <div class="quiz-q-text">
+                Q10) A ............. is a way of representing a single
+                functionality commonly used in Agile/Scrum.
+              </div>
+              <div class="quiz-options">
+                <div
+                  class="quiz-option"
+                  onclick="selectExamOption(this)"
+                  data-val="a"
+                >
+                  <div class="quiz-option-label">A</div>
+                  User Story
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectExamOption(this)"
+                  data-val="b"
+                >
+                  <div class="quiz-option-label">B</div>
+                  SRS document
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectExamOption(this)"
+                  data-val="c"
+                >
+                  <div class="quiz-option-label">C</div>
+                  Prototype
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectExamOption(this)"
+                  data-val="d"
+                >
+                  <div class="quiz-option-label">D</div>
+                  Use Case
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectExamOption(this)"
+                  data-val="e"
+                >
+                  <div class="quiz-option-label">E</div>
+                  Domain Analysis
+                </div>
+              </div>
+              <div class="quiz-feedback exam-feedback"></div>
+            </div>
+          </div>
+
+          <div class="quiz-section" style="margin-top: 1rem">
+            <div class="quiz-title">📝 Midterm 2025 - Past Questions</div>
+
+            <div
+              class="quiz-q"
+              data-exam-correct="c"
+              data-explanation="عبارة friendly and modern مبهمة وغير قابلة للقياس، لذلك تعتبر less testable."
+            >
+              <div class="quiz-q-text">
+                Q3) Which of these user stories is vague and less testable?
+              </div>
+              <div class="quiz-options">
+                <div
+                  class="quiz-option"
+                  onclick="selectExamOption(this)"
+                  data-val="a"
+                >
+                  <div class="quiz-option-label">A</div>
+                  As a user, I want to search for products using keywords, so I
+                  can find products to buy.
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectExamOption(this)"
+                  data-val="b"
+                >
+                  <div class="quiz-option-label">B</div>
+                  As an admin, I want to view logs, to audit user activity.
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectExamOption(this)"
+                  data-val="c"
+                >
+                  <div class="quiz-option-label">C</div>
+                  As a user, I want the UI to be friendly and modern, so I can
+                  easily use the program.
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectExamOption(this)"
+                  data-val="d"
+                >
+                  <div class="quiz-option-label">D</div>
+                  As a member, I want to reset my password via email, so I can
+                  recover my account.
+                </div>
+              </div>
+              <div class="quiz-feedback exam-feedback"></div>
+            </div>
+
+            <div
+              class="quiz-q"
+              data-exam-correct="d"
+              data-explanation="include = إلزامي (Take New Order includes Add Item + Accept Payment)، وextend = اختياري (Cancel Order may include Refund)، مع وجود Refund كـ use case مستقل للكاشير."
+            >
+              <div class="quiz-q-text">
+                Q4) A POS system where cashier can: take new order (includes Add
+                Item + Accept Payment), cancel order (may include Refund), and
+                issue Refund independently. Which diagram is correct?
+              </div>
+              <div class="quiz-options">
+                <div
+                  class="quiz-option"
+                  onclick="selectExamOption(this)"
+                  data-val="a"
+                >
+                  <div class="quiz-option-label">A</div>
+                  Wrong include/extend mapping
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectExamOption(this)"
+                  data-val="b"
+                >
+                  <div class="quiz-option-label">B</div>
+                  Refund only as include
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectExamOption(this)"
+                  data-val="c"
+                >
+                  <div class="quiz-option-label">C</div>
+                  No direct cashier-refund relation
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectExamOption(this)"
+                  data-val="d"
+                >
+                  <div class="quiz-option-label">D</div>
+                  Correct include/extend with direct Refund use case
+                </div>
+              </div>
+              <div class="quiz-feedback exam-feedback"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ======================== QUIZ ======================== -->
+        <div class="section" id="quiz-main">
+          <div class="section-header">
+            <div class="section-icon icon-green">🎮</div>
+            <div>
+              <div class="section-title">Interactive Practice</div>
+              <div class="section-num">Interactive Quiz - Test Yourself</div>
+            </div>
+          </div>
+
+          <div class="quiz-section" id="quiz-container">
+            <div class="quiz-title">
+              📝 Choose the correct answer, then click "Check My Answers"
+            </div>
+
+            <!-- Q1 -->
+            <div class="quiz-q" data-correct="c">
+              <div class="quiz-q-text">
+                1️⃣ How many main phases are in Requirements Engineering?
+              </div>
+              <div class="quiz-options">
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q1')"
+                  data-val="a"
+                >
+                  <div class="quiz-option-label">A</div>
+                  3 phases
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q1')"
+                  data-val="b"
+                >
+                  <div class="quiz-option-label">B</div>
+                  4 phases
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q1')"
+                  data-val="c"
+                >
+                  <div class="quiz-option-label">C</div>
+                  5 phases
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q1')"
+                  data-val="d"
+                >
+                  <div class="quiz-option-label">D</div>
+                  6 phases
+                </div>
+              </div>
+              <div class="quiz-feedback" id="fb-quiz-q1"></div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-q" data-correct="b">
+              <div class="quiz-q-text">
+                2️⃣ What distinguishes Non-Functional Requirements from
+                Functional Requirements?
+              </div>
+              <div class="quiz-options">
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q2')"
+                  data-val="a"
+                >
+                  <div class="quiz-option-label">A</div>
+                  They define what the system does
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q2')"
+                  data-val="b"
+                >
+                  <div class="quiz-option-label">B</div>
+                  They define how the system performs (quality, speed, security)
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q2')"
+                  data-val="c"
+                >
+                  <div class="quiz-option-label">C</div>
+                  They define who will use the system
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q2')"
+                  data-val="d"
+                >
+                  <div class="quiz-option-label">D</div>
+                  They define the project cost
+                </div>
+              </div>
+              <div class="quiz-feedback" id="fb-quiz-q2"></div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-q" data-correct="a">
+              <div class="quiz-q-text">3️⃣ Transition Requirements are:</div>
+              <div class="quiz-options">
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q3')"
+                  data-val="a"
+                >
+                  <div class="quiz-option-label">A</div>
+                  Temporary requirements that end after migration to the new
+                  system
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q3')"
+                  data-val="b"
+                >
+                  <div class="quiz-option-label">B</div>
+                  Permanent requirements in the final system
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q3')"
+                  data-val="c"
+                >
+                  <div class="quiz-option-label">C</div>
+                  Technical requirements only
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q3')"
+                  data-val="d"
+                >
+                  <div class="quiz-option-label">D</div>
+                  End-user requirements
+                </div>
+              </div>
+              <div class="quiz-feedback" id="fb-quiz-q3"></div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-q" data-correct="d">
+              <div class="quiz-q-text">
+                4️⃣ What is the first phase in Requirements Engineering?
+              </div>
+              <div class="quiz-options">
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q4')"
+                  data-val="a"
+                >
+                  <div class="quiz-option-label">A</div>
+                  Validation
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q4')"
+                  data-val="b"
+                >
+                  <div class="quiz-option-label">B</div>
+                  Documentation
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q4')"
+                  data-val="c"
+                >
+                  <div class="quiz-option-label">C</div>
+                  Analysis
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q4')"
+                  data-val="d"
+                >
+                  <div class="quiz-option-label">D</div>
+                  Elicitation
+                </div>
+              </div>
+              <div class="quiz-feedback" id="fb-quiz-q4"></div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-q" data-correct="c">
+              <div class="quiz-q-text">
+                5️⃣ What is wrong with this requirement: "The system must be
+                fast"?
+              </div>
+              <div class="quiz-options">
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q5')"
+                  data-val="a"
+                >
+                  <div class="quiz-option-label">A</div>
+                  Incomplete
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q5')"
+                  data-val="b"
+                >
+                  <div class="quiz-option-label">B</div>
+                  Inconsistent
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q5')"
+                  data-val="c"
+                >
+                  <div class="quiz-option-label">C</div>
+                  Not Verifiable
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q5')"
+                  data-val="d"
+                >
+                  <div class="quiz-option-label">D</div>
+                  Not Traceable
+                </div>
+              </div>
+              <div class="quiz-feedback" id="fb-quiz-q5"></div>
+            </div>
+
+            <!-- Q6 -->
+            <div class="quiz-q" data-correct="b">
+              <div class="quiz-q-text">
+                6️⃣ Brainstorming during elicitation is characterized by:
+              </div>
+              <div class="quiz-options">
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q6')"
+                  data-val="a"
+                >
+                  <div class="quiz-option-label">A</div>
+                  Individual sessions with each stakeholder
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q6')"
+                  data-val="b"
+                >
+                  <div class="quiz-option-label">B</div>
+                  A moderated group session that generates collective ideas
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q6')"
+                  data-val="c"
+                >
+                  <div class="quiz-option-label">C</div>
+                  Designing a system prototype
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q6')"
+                  data-val="d"
+                >
+                  <div class="quiz-option-label">D</div>
+                  Observing users in their work environment
+                </div>
+              </div>
+              <div class="quiz-feedback" id="fb-quiz-q6"></div>
+            </div>
+
+            <!-- Q7 -->
+            <div class="quiz-q" data-correct="a">
+              <div class="quiz-q-text">
+                7️⃣ In a Use Case Diagram, «include» means:
+              </div>
+              <div class="quiz-options">
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q7')"
+                  data-val="a"
+                >
+                  <div class="quiz-option-label">A</div>
+                  The use case must include the other one (mandatory)
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q7')"
+                  data-val="b"
+                >
+                  <div class="quiz-option-label">B</div>
+                  The use case may include the other one (optional)
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q7')"
+                  data-val="c"
+                >
+                  <div class="quiz-option-label">C</div>
+                  The use case inherits from the other one
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q7')"
+                  data-val="d"
+                >
+                  <div class="quiz-option-label">D</div>
+                  The use case cancels the other one
+                </div>
+              </div>
+              <div class="quiz-feedback" id="fb-quiz-q7"></div>
+            </div>
+
+            <!-- Q8 -->
+            <div class="quiz-q" data-correct="d">
+              <div class="quiz-q-text">
+                8️⃣ How many sections are in the Domain Analysis Document?
+              </div>
+              <div class="quiz-options">
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q8')"
+                  data-val="a"
+                >
+                  <div class="quiz-option-label">A</div>
+                  5 sections
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q8')"
+                  data-val="b"
+                >
+                  <div class="quiz-option-label">B</div>
+                  6 sections
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q8')"
+                  data-val="c"
+                >
+                  <div class="quiz-option-label">C</div>
+                  7 sections
+                </div>
+                <div
+                  class="quiz-option"
+                  onclick="selectOption(this, 'quiz-q8')"
+                  data-val="d"
+                >
+                  <div class="quiz-option-label">D</div>
+                  8 sections (A to H)
+                </div>
+              </div>
+              <div class="quiz-feedback" id="fb-quiz-q8"></div>
+            </div>
+
+            <button class="quiz-btn" onclick="checkAllQuestions()">
+              ✅ Check My Answers
+            </button>
+
+            <div class="quiz-score-display" id="quiz-score">
+              <div class="score-num" id="score-text">0/8</div>
+              <div
+                style="color: var(--text2); margin-top: 0.5rem"
+                id="score-msg"
+              >
+                Try again!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="height: 3rem"></div>
+      </main>
+    </div>
+
+    <!-- Mobile Nav -->
+    <nav class="mobile-nav">
+      <a href="#hero"><span class="m-icon">🏠</span>الرئيسية</a>
+      <a href="#s2"><span class="m-icon">📋</span>RE</a>
+      <a href="#s3"><span class="m-icon">🎯</span>أنواع</a>
+      <a href="#s4"><span class="m-icon">📝</span>مراحل</a>
+      <a href="#s5"><span class="m-icon">📄</span>توثيق</a>
+      <a href="#s6"><span class="m-icon">🎭</span>Use Cases</a>
+      <a href="#terms"><span class="m-icon">📚</span>مصطلحات</a>
+      <a href="#exam"><span class="m-icon">🏆</span>امتحانات</a>
+      <a href="#quiz-main"><span class="m-icon">🎮</span>تدريب</a>
+    </nav>
+
+    <script>
+      // ===== PROGRESS BAR =====
+      window.addEventListener("scroll", () => {
+        const scrollTop = document.documentElement.scrollTop;
+        const scrollHeight =
+          document.documentElement.scrollHeight -
+          document.documentElement.clientHeight;
+        const progress = (scrollTop / scrollHeight) * 100;
+        document.getElementById("progress-bar").style.width = progress + "%";
+      });
+
+      // ===== TOGGLE EXPLAIN =====
+      function toggleExplain(toggle) {
+        const block = toggle.parentElement;
+        block.classList.toggle("open");
+      }
+
+      // ===== FLIP TERM =====
+      function flipTerm(card) {
+        card.classList.toggle("flipped");
+      }
+
+      // ===== QUIZ =====
+      const quizSelections = {};
+
+      function selectOption(el, qid) {
+        const parent = el.parentElement;
+        parent
+          .querySelectorAll(".quiz-option")
+          .forEach((o) => o.classList.remove("selected"));
+        el.classList.add("selected");
+        quizSelections[qid] = el.dataset.val;
+      }
+
+      function checkAllQuestions() {
+        const questions = document.querySelectorAll(".quiz-q[data-correct]");
+        let score = 0;
+        let total = questions.length;
+        let answered = 0;
+
+        const qids = [
+          "quiz-q1",
+          "quiz-q2",
+          "quiz-q3",
+          "quiz-q4",
+          "quiz-q5",
+          "quiz-q6",
+          "quiz-q7",
+          "quiz-q8",
+        ];
+        const feedbacks = {
+          "quiz-q1": {
+            correct: "✅ إجابة صحيحة! الـ RE فيه 5 phases أساسية.",
+            wrong:
+              "❌ إجابة غير صحيحة. الترتيب الأساسي هو 5 phases: Elicitation, Analysis, Specification, Validation, Management.",
+          },
+          "quiz-q2": {
+            correct:
+              "✅ ممتاز! الـ NFRs بتوصف how the system performs مش what the system does.",
+            wrong:
+              "❌ إجابة غير صحيحة. الـ NFRs بتحدد طريقة تشغيل النظام: quality, speed, security, scalability, etc.",
+          },
+          "quiz-q3": {
+            correct: "✅ إجابة صحيحة! Transition requirements بتكون مؤقتة.",
+            wrong:
+              "❌ إجابة غير صحيحة. Transition requirements متطلبات مؤقتة وتنتهي بعد اكتمال migration للنظام الجديد.",
+          },
+          "quiz-q4": {
+            correct: "✅ ممتاز! Elicitation هي أول خطوة دائمًا.",
+            wrong:
+              "❌ إجابة غير صحيحة. أول phase هي Elicitation (requirements gathering).",
+          },
+          "quiz-q5": {
+            correct: '✅ إجابة صحيحة! كلمة "Fast" تعتبر vague ومش measurable.',
+            wrong:
+              '❌ إجابة غير صحيحة. المشكلة إن "fast" مش measurable. الـ good requirement لازم يكون verifiable مثل: "1000 transactions/sec".',
+          },
+          "quiz-q6": {
+            correct:
+              "✅ إجابة صحيحة! Brainstorming عبارة عن moderated group ideation session.",
+            wrong:
+              "❌ إجابة غير صحيحة. Brainstorming هو moderated group session بيولّد collective ideas.",
+          },
+          "quiz-q7": {
+            correct: "✅ ممتاز! علاقة include بتكون mandatory.",
+            wrong:
+              "❌ إجابة غير صحيحة. include معناها إن الـ use case لازم يضم الحالة الأخرى (mandatory)، بينما extend بتكون optional.",
+          },
+          "quiz-q8": {
+            correct: "✅ إجابة صحيحة! الوثيقة فيها 8 sections من A إلى H.",
+            wrong:
+              "❌ إجابة غير صحيحة. وثيقة Domain Analysis فيها 8 sections: A. Introduction, B. Glossary, C. General Knowledge, D. Customers & Users, E. Environment, F. Tasks & Procedures, G. Competing Software, H. Similarities to other domains.",
+          },
+        };
+
+        qids.forEach((qid, i) => {
+          const q = questions[i];
+          const correct = q.dataset.correct;
+          const selected = quizSelections[qid];
+          const fb = document.getElementById("fb-" + qid);
+
+          const options = q.querySelectorAll(".quiz-option");
+          options.forEach((o) => {
+            o.classList.remove("correct", "wrong");
+            if (o.dataset.val === correct) o.classList.add("correct");
+            if (selected && o.dataset.val === selected && selected !== correct)
+              o.classList.add("wrong");
+          });
+
+          if (selected) {
+            answered++;
+            fb.style.display = "block";
+            if (selected === correct) {
+              score++;
+              fb.className = "quiz-feedback feedback-correct";
+              fb.innerHTML = feedbacks[qid].correct;
+            } else {
+              fb.className = "quiz-feedback feedback-wrong";
+              fb.innerHTML = feedbacks[qid].wrong;
+            }
+          } else {
+            fb.style.display = "block";
+            fb.className = "quiz-feedback feedback-wrong";
+            fb.innerHTML =
+              "⚠️ لم تختَر إجابة لهذا السؤال. Correct answer: " +
+              feedbacks[qid].correct.replace("✅ ", "");
+          }
+        });
+
+        const scoreEl = document.getElementById("quiz-score");
+        scoreEl.style.display = "block";
+        document.getElementById("score-text").textContent = score + "/" + total;
+
+        const pct = Math.round((score / total) * 100);
+        let msg = "";
+        if (pct === 100) msg = "🏆 ممتاز جدًا! أنت جاهز للامتحان.";
+        else if (pct >= 75) msg = "💪 جيد جدًا! راجع الأسئلة اللي أخطأت فيها.";
+        else if (pct >= 50)
+          msg = "📚 محتاج مراجعة أكتر. ركّز على الموضوعات اللي فاتتك.";
+        else msg = "🔄 راجع المحتوى مرة تانية وجرب من جديد!";
+        document.getElementById("score-msg").textContent = msg;
+
+        scoreEl.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+
+      // ===== EXAM QUESTIONS INTERACTION =====
+      function selectExamOption(el) {
+        const question = el.closest(".quiz-q");
+        const selectedVal = el.dataset.val;
+        const correctVal = question.dataset.examCorrect;
+        const feedback = question.querySelector(".exam-feedback");
+        const explanation = question.dataset.explanation;
+
+        const options = question.querySelectorAll(".quiz-option");
+        options.forEach((o) =>
+          o.classList.remove("selected", "correct", "wrong"),
+        );
+
+        el.classList.add("selected");
+
+        const correctOption = question.querySelector(
+          `.quiz-option[data-val="${correctVal}"]`,
+        );
+
+        if (correctOption) {
+          correctOption.classList.add("correct");
+        }
+
+        if (selectedVal === correctVal) {
+          feedback.className = "quiz-feedback exam-feedback feedback-correct";
+          feedback.innerHTML = `✅ إجابة صحيحة.<br>${explanation}`;
+        } else {
+          el.classList.add("wrong");
+          const correctLabel =
+            correctOption
+              ?.querySelector(".quiz-option-label")
+              ?.textContent?.trim() || correctVal.toUpperCase();
+          feedback.className = "quiz-feedback exam-feedback feedback-wrong";
+          feedback.innerHTML = `❌ إجابة غلط. الإجابة الصحيحة: (${correctLabel}).<br>${explanation}`;
+        }
+
+        feedback.style.display = "block";
+      }
+
+      // ===== SEARCH =====
+      function searchContent(query) {
+        const main = document.getElementById("content");
+
+        // Remove previous highlights
+        main.querySelectorAll(".search-highlight").forEach((el) => {
+          el.outerHTML = el.innerHTML;
+        });
+
+        if (!query || query.length < 2) return;
+
+        const walker = document.createTreeWalker(main, NodeFilter.SHOW_TEXT);
+        const nodes = [];
+        while (walker.nextNode()) {
+          nodes.push(walker.currentNode);
+        }
+
+        nodes.forEach((node) => {
+          const text = node.textContent;
+          const regex = new RegExp(query, "gi");
+          if (regex.test(text)) {
+            const span = document.createElement("span");
+            span.innerHTML = text.replace(
+              regex,
+              (match) => `<mark class="search-highlight">${match}</mark>`,
+            );
+            node.parentNode.replaceChild(span, node);
+          }
+        });
+      }
+
+      // ===== ACTIVE NAV =====
+      const sections = document.querySelectorAll(".section, .hero");
+      const navLinks = document.querySelectorAll(
+        ".sidebar nav a, .mobile-nav a",
+      );
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const id = entry.target.id;
+              navLinks.forEach((link) => {
+                link.classList.remove("active");
+                if (link.getAttribute("href") === "#" + id) {
+                  link.classList.add("active");
+                }
+              });
+            }
+          });
+        },
+        { threshold: 0.3 },
+      );
+
+      sections.forEach((s) => observer.observe(s));
+      document.querySelector(".hero") &&
+        observer.observe(document.querySelector(".hero"));
+    </script>
+  </body>
 </html>
